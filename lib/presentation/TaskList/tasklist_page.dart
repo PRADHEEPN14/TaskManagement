@@ -24,7 +24,7 @@ class TaskListPage extends StatelessWidget {
         ),
 
         child: Center(
-          child: Text('Its Your Task List Page:'),
+          child: Text('Its Your Task List Page view:'),
         ),
       ),
     );
