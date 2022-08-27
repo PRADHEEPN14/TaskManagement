@@ -17,8 +17,8 @@ class _SplashscreenState extends State<Splashscreen> {
 @override
 void initState(){
   super.initState();
-  Future.delayed(Duration (seconds: 6),(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn(),));
+  Future.delayed(const Duration (seconds: 4),(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SignIn(),));
 
   });
     
@@ -34,7 +34,7 @@ void initState(){
       body: Container(
          width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-         decoration: BoxDecoration(
+         decoration:const BoxDecoration(
                 gradient: LinearGradient(colors: [
                   Color(0xFF0360AC),
                   Color(0xFF2370F5),
@@ -47,14 +47,14 @@ void initState(){
           child: Column(
             children: [
               Center(
-                child: Image.asset('images/skein_logo.png',height: 500,width: 500,color: Color(0xFFFAF9F9)),
+                child: Image.asset('images/skein_logo.png',height: 500,width: 500,color:const Color(0xFFFAF9F9)),
                 
                 
                 ),
-              CircularProgressIndicator(
+             const CircularProgressIndicator(
                 backgroundColor: Colors.blueGrey,
-                color: Color(0xFF020D78),
-                semanticsLabel: "Welcome",
+                color: Color(0xFFFAFAFB),
+                
               ),
             ],
           ),

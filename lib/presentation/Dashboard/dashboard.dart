@@ -1,15 +1,9 @@
 // import 'package:bloc_auth/bloc/bloc/auth_bloc.dart';
-import 'package:bloc_auth/bloc/auth/auth_bloc.dart';
-import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_bloc.dart';
-import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_event.dart';
-import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_state.dart';
-import 'package:bloc_auth/presentation/SignIn/sign_in.dart';
-import 'package:bloc_auth/presentation/Task/task_page.dart';
-import 'package:bloc_auth/presentation/TaskList/tasklist_page.dart';
+// import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_bloc.dart';
+// import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_event.dart';
+// import 'package:bloc_auth/bloc/auth/bottom_navigation_bloc/bloc/bottom_navigation_state.dart';
 import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -17,30 +11,165 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Getting the user from the FirebaseAuth Instance
-    final user = FirebaseAuth.instance.currentUser!;
-    return SafeArea(
+    // final user = FirebaseAuth.instance.currentUser!;
+    return const SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: const Text('TaskManagement')),
-          backgroundColor: Color(0xFFF44141),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(18.0))),
-          
+        bottomNavigationBar: BottomNaviagate(),
+        
         ),
-        body:
-         BlocListener<AuthBloc, AuthState>(
+        );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // body:
+        //  BlocListener<AuthBloc, AuthState>(
           
-          listener: (context, state) {
-            if (state is UnAuthenticated) {
-              // Navigate to the sign in screen when the user Signs Out
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => SignIn()),
-                (route) => false,
-              );
-            }
+        //   listener: (context, state) {
+        //     if (state is UnAuthenticated) {
+        //       // Navigate to the sign in screen when the user Signs Out
+        //       Navigator.of(context).pushAndRemoveUntil(
+        //         MaterialPageRoute(builder: (context) => SignIn()),
+        //         (route) => false,
+        //       );
+        //     }
            
-          },
-          child: Aboutme(),
-        ),
+        //   },
+        //   child: Container(),
+        //   //   
+        // ),
         
         
         // BlocBuilder<BottomNavigationBloc,BottomNavigationState>(
@@ -64,7 +193,7 @@ class Dashboard extends StatelessWidget {
           
           
           // child: Container(),
-          // child: Center(
+        // child: Center(
           //   child: Column(
           //     mainAxisAlignment: MainAxisAlignment.center,
           //     children: [
@@ -80,7 +209,7 @@ class Dashboard extends StatelessWidget {
           //           ? Text("${user.displayName}")
           //           : Container(),
           //       const SizedBox(height: 16),
-          //       
+                
                 
               
           //     ],
@@ -109,54 +238,50 @@ class Dashboard extends StatelessWidget {
         // //     );
         // //   }
         //   ),
-        bottomNavigationBar: BottomNaviagate(),
-        drawer: Drawer(
-          child: Column(
+
+
+         // drawer: Drawer(
+        //   child: Column(
           
-            children: [
-              UserAccountsDrawerHeader(accountName: Text("${user.email}"), accountEmail: Text("${user.displayName}"),
-              otherAccountsPictures: [
-                user.photoURL != null
-                ? Image.network("${user.photoURL}")
-                :Container(),
+        //     children: [
+        //       UserAccountsDrawerHeader(accountName: Text("${user.email}"), accountEmail: Text("${user.displayName}"),
+        //       otherAccountsPictures: [
+        //         user.photoURL != null
+        //         ? Image.network("${user.photoURL}")
+        //         :Container(),
 
                 
-                ],
-              otherAccountsPicturesSize: Size.square(85),
+        //         ],
+        //       otherAccountsPicturesSize: Size.square(85),
               
-              ),
-              Divider(height: 10,),
+        //       ),
+        //       Divider(height: 10,),
                
-              ListTile(
-                leading: Icon(Icons.supervised_user_circle,size: 30,color: Color(0xFF040BCB),),
-                title: Text("Profile",style: TextStyle(color: Color(0xFF212121),fontStyle: FontStyle.normal,fontWeight: FontWeight.bold,fontSize: 18),),
+        //       ListTile(
+        //         leading: Icon(Icons.supervised_user_circle,size: 30,color: Color(0xFF040BCB),),
+        //         title: Text("Profile",style: TextStyle(color: Color(0xFF212121),fontStyle: FontStyle.normal,fontWeight: FontWeight.bold,fontSize: 18),),
+        //         onTap:() =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>AddInfoPage() ,)),
+        //       ),
+        //       Divider(height: 10,),
+        //       // ListTile(
+        //       //   leading: Icon(Icons.list_sharp,size: 30,color: Color(0xFF040BCB),),
+        //       //   title: Text("Task List",style: TextStyle(color: Color(0xFF212121),fontStyle: FontStyle.normal,fontWeight: FontWeight.bold,fontSize: 18),),
                 
-              ),
-              Divider(height: 10,),
-              ListTile(
-                leading: Icon(Icons.list_sharp,size: 30,color: Color(0xFF040BCB),),
-                title: Text("Task List",style: TextStyle(color: Color(0xFF212121),fontStyle: FontStyle.normal,fontWeight: FontWeight.bold,fontSize: 18),),
-                
-              ),
-              Divider(height: 10,),
-              SizedBox(
-                 child: Padding(
-                   padding: const EdgeInsets.only(left: 5),
-                   child: ElevatedButton(
-                      child: const Text('Sign Out'),
-                      onPressed: () {
-                       // Signing out the user
-                         context.read<AuthBloc>().add(SignOutRequested());
-                    },
-                    ),
-                 ),
-               ),
+        //       // ),
+        //       Divider(height: 10,),
+        //       SizedBox(
+        //          child: Padding(
+        //            padding: const EdgeInsets.only(left: 5),
+        //            child: ElevatedButton(
+        //               child: const Text('Sign Out'),
+        //               onPressed: () {
+        //                // Signing out the user
+        //                  context.read<AuthBloc>().add(SignOutRequested());
+        //             },
+        //             ),
+        //          ),
+        //        ),
 
-            ],
-                ),
-          ),
-        ),
-      
-    );
-  }
-}
+        //     ],
+        //         ),
+        //   ),

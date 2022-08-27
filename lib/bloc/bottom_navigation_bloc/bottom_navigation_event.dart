@@ -42,5 +42,5 @@ abstract class BottomNavigationEvent extends Equatable{
     PageTapped({required this.index});
 
     @override
-    String toString() =>'PageTapped $index';
+    String toString() =>'PageTapped: $index';
   }

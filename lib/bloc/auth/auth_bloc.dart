@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_auth/data/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
@@ -37,7 +38,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleSignInRequested>((event, emit) async {
       emit(Loading());
       try {
-        await authRepository.signInWithGoogle();
+         await authRepository.signInWithGoogle();
+        print("Signout");
         emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));

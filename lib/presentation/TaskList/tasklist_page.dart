@@ -1,32 +1,33 @@
-import 'package:flutter/material.dart';
 
-class TaskListPage extends StatelessWidget {
-  final String text;
+// import 'package:flutter/material.dart';
 
-  TaskListPage({required this.text}) : super();
+// class TaskListPage extends StatelessWidget {
+//   final String text;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
-        title: Text('TaskList'),
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(begin:Alignment.topRight ,end: Alignment.bottomLeft,
-            colors: [Colors.red,
-            Color(0xFFF8990B),
-          Color(0xFFF8D929),
-          ])
-        ),
+//   TaskListPage({required this.text}) : super();
 
-        child: Center(
-          child: Text('Its Your Task List Page view:'),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.deepOrangeAccent,
+//         title: Text('TaskList'),
+//       ),
+//       body: Container(
+//         width: MediaQuery.of(context).size.width,
+//         height: MediaQuery.of(context).size.height,
+//         decoration: BoxDecoration(
+//           gradient: LinearGradient(begin:Alignment.topRight ,end: Alignment.bottomLeft,
+//             colors: [Colors.red,
+//             Color(0xFFF8990B),
+//           Color(0xFFF8D929),
+//           ])
+//         ),
+
+//         child: Center(
+//           child: Text('Its Your Task List Page view:'),
+//         ),
+//       ),
+//     );
+//   }
+// }

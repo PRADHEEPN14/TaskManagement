@@ -36,8 +36,12 @@ class AuthRepository {
   }
 
   Future<void> signInWithGoogle() async {
+    
     try {
+     
+      await GoogleSignIn().signOut();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      
 
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
@@ -46,11 +50,35 @@ class AuthRepository {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
+      // GoogleLogin(googleUser!.email,googleUser.displayName);
+       
+      print('${googleUser}');
+      print('NAME==${googleUser!.displayName}');
+      print('EMAIL==${googleUser.email}');
+      
+      
       await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       throw Exception(e.toString());
     }
+
+    // await GoogleSignIn().signOut();
+    // try {
+    //   GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
+    //   if (googleSignInAccount != null) {
+    //     GoogleSignInAuthentication googleAuth =
+    //         await googleSignInAccount.authentication;
+    //         print("user:${googleSignInAccount.email}");
+    //     // GoogleSignIn(
+    //     //     googleSignInAccount.email, googleSignInAccount.displayName);
+    //   }
+
+    //   print("4");
+    // } catch (error) {
+    //   print("5:$error");
+    //   // ignore: avoid_returning_null_for_void
+    //   return null;
+    // }
   }
 
   Future<void> signOut() async {
