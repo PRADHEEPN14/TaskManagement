@@ -1,10 +1,10 @@
-class Task_Res {
+class Update_Res {
   bool? status;
   String? message;
 
-  Task_Res({this.status, this.message});
+  Update_Res({this.status, this.message});
 
-  Task_Res.fromJson(Map<String, dynamic> json) {
+  Update_Res.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
   }

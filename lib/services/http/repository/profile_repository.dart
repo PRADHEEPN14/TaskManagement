@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class ProfileRepository{
   static Future<dynamic>Profile(
-    String email,userRole,mobilenum,Apikey,
+    String userRole,mobilenum,Apikey,
   )async{
     try{
       var dio =Dio();
 
     // response
-    var response = await dio.post("",data:{"email":email,"userRole":userRole,"mobilenum":mobilenum,"Apikey":Apikey});
+    var response = await dio.post("",data:{"userRole":userRole,"mobilenum":mobilenum,"Apikey":Apikey});
     print(response);
 
 

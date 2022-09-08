@@ -1,92 +1,46 @@
 import 'dart:convert';
-import 'dart:ffi';
 
-import 'package:bloc_auth/preference_helper.dart';
 import 'package:bloc_auth/presentation/TaskList/task_list.dart';
-import 'package:bloc_auth/presentation/widgets/drawer.dart';
-import 'package:bloc_auth/services/model/project_list.dart';
 import 'package:bloc_auth/services/model/task_request.dart';
-// import 'package:bloc_auth/presentation/TaskList/tasklist_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:intl/intl.dart';
 
 import '../../services/Apiservices/ApiService.dart';
+import '../../services/model/profile_response.dart';
+import '../../services/model/tasklist_response.dart';
+import '../widgets/drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-class TaskPage extends StatefulWidget {
-  const TaskPage({Key? key}) : super(key: key);
+class EditTaskPage extends StatefulWidget {
+  int? dailyTimeId;
+  // List<Data>? AllTask;
+  String? startTime;
+  String? endTime;
+  String? startedDate;
+  String? projectlist;
+  String? taskList;
+  String? taskdescript;
+  EditTaskPage({Key? key, this.dailyTimeId, this.startTime, this.endTime, this.startedDate, this.projectlist, this.taskList, this.taskdescript }) : super(key: key);
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
+  State<EditTaskPage> createState() => _EditTaskPageState();
 }
 
-class _TaskPageState extends State<TaskPage> {
-
-  List Allprojectlist = [];
-  List Alltasklist = [];
-
-  Future getAllproject() async {
-    var baseUrl =
-        "https://api.clockify.me/api/v1/workspaces/5dc44ce28044af3bae2d11f5/projects";
-
-    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
-      "x-api-key": "M2ZlMWM0Y2YtMjJlMC00YTRiLWJjZGYtM2VjMGNhNDJiMzNi"
-    });
-
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      setState(() {
-        Allprojectlist = jsonData;
-        // print('project$Allprojectlist') ;
-      });
-      // getAllCategory();
-    }
-  }
-
-  Future getAllCategory() async {
-    var baseUrl =
-        "https://api.clockify.me/api/v1/workspaces/5dc44ce28044af3bae2d11f5/projects/${dropdownvalue}/tasks";
-
-    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
-      "x-api-key": "M2ZlMWM0Y2YtMjJlMC00YTRiLWJjZGYtM2VjMGNhNDJiMzNi"
-    });
-
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      setState(() {
-        Alltasklist = jsonData;
-        // print('${Alltasklist[0]['name']}') ;
-      });
-    }
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //     getAllproject();
-
-  // }
-
-  var ctx;
+class _EditTaskPageState extends State<EditTaskPage> {
+  String userId = '';
   String task = "";
   String description = "";
   String Project = "";
   String startTime = "";
   String endTime = "";
   String dateInput = "";
-  var dropdownvalue;
-  var dropdownvalue1;
-
-
-  var isLoading = true;
-
-  //  var selectedName;
-//  List listdata = [];
-  final user = FirebaseAuth.instance.currentUser!;
+  var Projectvalue;
+  var Listvalue;
+ 
+  var selectedValue;
+  var selectedValue1;
 
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
@@ -100,32 +54,29 @@ class _TaskPageState extends State<TaskPage> {
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy);
 
-  static GlobalKey<FormFieldState> form_key = GlobalKey<FormFieldState>();
-
-  @override
+     @override
   void initState() {
-    // allprojects();
-    // getAllName();
-    dateInputController.text = "";
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_)=> TaskPage(context));
-    getAllproject();
-    // getAllCategory();
+    // TODO: implement initState
+    // super.initState();
+  getAllproject();
+  print('xxxxx---${widget.projectlist}');
+   print('xxxxx---${widget.taskList}');
+    // print('xxxxx---${widget.startedDate}');
+  // print()
+  setState(() {
+   startTimeController.text= widget.startTime!;
+  endTimeController.text=widget.endTime!;
+  dateInputController.text= widget.startedDate!;
+  // selectedValue =widget.projectlist!;
+  // selectedValue1=widget.taskList!;
+  descriptionController.text=widget.taskdescript!; 
+  });
+  
+
+
+
   }
 
-  //snackbar style here..
-  void showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      width: 330,
-      duration: const Duration(seconds: 1),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  //end snackbar style here..
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +85,13 @@ class _TaskPageState extends State<TaskPage> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Builder(builder: (BuildContext context) {
-            return TaskPage(context);
+            return EditTaskPage(context);
           }),
         ));
   }
 
-  TaskPage(BuildContext context) {
+  EditTaskPage(BuildContext context) {
+    // context= newContext;
     return SafeArea(
         child: Scaffold(
       // appBar: AppBar( title: Text("Today Task")),
@@ -154,7 +106,6 @@ class _TaskPageState extends State<TaskPage> {
         decoration: const BoxDecoration(
             // color: Color(0xFFD9D7D7)
             ),
-        key: form_key,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Padding(
@@ -284,28 +235,31 @@ class _TaskPageState extends State<TaskPage> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButtonFormField(
                           decoration: const InputDecoration(
-                              labelText: 'Task',
+                              labelText: 'Select project',
                               border: OutlineInputBorder(),
                               disabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white))),
                           isExpanded: true,
-                          validator: (selectedValue) =>
-                              selectedValue == null ? "select Task" : null,
+                          validator: (Projectvalue) =>
+                              Projectvalue == null ? "select Task" : null,
                           autovalidateMode: AutovalidateMode.always,
-                          hint: Text('Tasks'),
+                          // hint: Text('Slelect Project'),
                           items: Allprojectlist.map((item) {
                             return DropdownMenuItem(
                               value: item["id"].toString(),
                               child: Text(item['name'].toString()),
                             );
                           }).toList(),
-                          onChanged: (newVal) {
+                          onChanged: (selectedValue) {
+                            print(selectedValue);
                             setState(() {
-                              dropdownvalue = newVal;
+                              Projectvalue = selectedValue;
                               getAllCategory();
+                              print('$Projectvalue');
+                              
                             });
                           },
-                          value: dropdownvalue,
+                          value: Projectvalue,
                         ),
                       ),
                     ),
@@ -317,73 +271,34 @@ class _TaskPageState extends State<TaskPage> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButtonFormField(
                           decoration: const InputDecoration(
-                            
                             border: OutlineInputBorder(),
                             // enabled: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))
                           ),
                           isExpanded: true,
-                          validator: (selectedValue) =>
-                              selectedValue == null ? "select Project" : null,
+                          validator: (Listvalue) =>
+                              Listvalue == null ? "select Project" : null,
                           autovalidateMode: AutovalidateMode.always,
-                          hint: Text('Select your Project'),
+                          hint: Text('Select your Task'),
                           items: Alltasklist.map((item) {
                             return DropdownMenuItem(
                               value: item["id"].toString(),
                               child: Text(item['name'].toString()),
                             );
                           }).toList(),
-                          onChanged: (newVal) {
+                          onChanged: (selectedValue1) {
+                            print(selectedValue1);
                             setState(() {
-                              dropdownvalue1 = newVal;
+                              Listvalue = selectedValue1;
+                               
                             });
                           },
-                          value: dropdownvalue1,
+                          value: Listvalue,
                         ),
                       ),
                     ),
-
-                    // DropdownButton(
-                    //   isExpanded: true,
-                    //   items: listdata.map((item){
-
-                    //   return DropdownMenuItem(
-                    //     child: Text(item['project_title'].toString()),
-                    //   value: item['project_title'].toString(),);
-                    // },).toList(),
-                    //  onChanged: (newValue){
-                    //   setState(() {
-                    //     selectedName == newValue;
-                    //     print(selectedName);
-                    //   });
-                    // },
-                    // value: selectedName,
-                    // hint:const Text("project"),
-
-                    // ),
-
-                    // ),
-
                     const SizedBox(
                       height: 18,
                     ),
-                    // SizedBox(
-                    //   height: 70,
-                    //   child: TextFormField(
-                    //     textInputAction: TextInputAction.next,
-                    //     autovalidateMode: AutovalidateMode.always,
-                    //     validator: (value) {
-                    //       task = value!;
-                    //       if (task.isEmpty) {
-                    //         return "please enter field";
-                    //       }
-                    //     },
-                    //     decoration: const InputDecoration(
-                    //         border: OutlineInputBorder(
-                    //             borderSide: BorderSide(color: Colors.grey)),
-                    //         hintText: "Task",
-                    //         labelText: "Your Task"),
-                    //   ),
-                    // ),
                     const SizedBox(
                       height: 18,
                     ),
@@ -403,83 +318,129 @@ class _TaskPageState extends State<TaskPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey)),
                             hintText: "Task description",
-                            labelText: "Dfescription"),
+                            labelText: "Description"),
                       ),
                     ),
                   ]),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print("start--$startTime");
-                    print("end--$endTime");
-                    // print("project--$Project");
-                    // print("stack$task");
-                    print("des${descriptionController.text}");
-                    print("date${dateInputController.text}");
-                    print("list--$dropdownvalue");
-                    print("project--$dropdownvalue1");
 
-                    // &&(endTimeController ==null)&&(ProjectController==null)&&(descriptionController==null)&&(TaskController==null))
 
                     if ((startTime != "") &&
                         (endTime != "") &&
                         (startTime.length > 4) &&
                         (endTime.length > 4) &&
-                        (dropdownvalue != "" || dropdownvalue != null) &&
-                        (dropdownvalue1 != "" || dropdownvalue1 != null) &&
-                        // (task != "") &&
+                        (Projectvalue != "" || Projectvalue != null) &&
+                        (Listvalue != "" || Listvalue != null) &&
                         (descriptionController.text != "") &&
                         (dateInputController.text != "")) {
-                      // ScaffoldMessenger.of(context1).showSnackBar(SnackBar(content: Text("valid form")));
+
+
+                          print("start--$startTime");
+                    print("end--$endTime");
+                    
+                    print("des${descriptionController.text}");
+                    print("date${dateInputController.text}");
+                    print("project--$Projectvalue");
+                    print("list--$Listvalue");
+                     
                       showSnackBar(context, "Task updated Sucessfully...!");
+                      updatetask(context);
 
                       print("valid form");
 
-                      createtask(context);
+                      // createtask(context);
                     } else {
-                      // ScaffoldMessenger.of(context1).showSnackBar(SnackBar(content: Text("invalid form")));
+                      
                       showSnackBar(context, "Please enter all fields.");
                     }
                   },
-                  child: const Text("Add Task"),
+                  child: const Text("Update Task"),
                 )
               ],
             ),
           ),
         ),
       ),
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
     ));
   }
-  // void allprojects(){
 
-  //   var api =Provider.of<ApiService>(context,listen: false);
-  //   api.allprojects().then((response){
-  //     print(response);
-  //     if(response.status ==true){
-  //       setState(() {
-  //         listdata = response.data!;
-  //       });
-  //     }
-  //   });
-
-  // }
-
-  void createtask(context) {
-    var api = Provider.of<ApiService>(context, listen: false);
-    Task_Req TaskData = Task_Req();
-    TaskData.clockifyProjectId = dropdownvalue;
-    TaskData.clockifyTaskId = dropdownvalue1;
-    TaskData.startTime = startTimeController.text;
-    TaskData.taskDescription = descriptionController.text;
-    TaskData.startedDate = dateInputController.text;
-    TaskData.endTime = endTimeController.text;
-    api.createtask(TaskData).then((response) {
-      if (response.status == true) {
-        print(response.status);
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) => const TaskList()),);
-      }
-    });
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+      width: 330,
+      duration: const Duration(seconds: 1),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+//  ...dropdown AllProject List API here...   //
+
+  List Allprojectlist = [];
+  List Alltasklist = [];
+
+  Future getAllproject() async {
+    var baseUrl =
+        "https://api.clockify.me/api/v1/workspaces/5dc44ce28044af3bae2d11f5/projects";
+
+    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
+      "x-api-key": "M2ZlMWM0Y2YtMjJlMC00YTRiLWJjZGYtM2VjMGNhNDJiMzNi"
+    });
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      setState(() {
+        Allprojectlist = jsonData;
+        // print('project$Allprojectlist') ;
+      });
+      // getAllCategory();
+    }
+  }
+
+// ...dropdown AllTask List API here... //
+
+  Future getAllCategory() async {
+    var baseUrl =
+        "https://api.clockify.me/api/v1/workspaces/5dc44ce28044af3bae2d11f5/projects/${Projectvalue}/tasks";
+
+    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
+      "x-api-key": "M2ZlMWM0Y2YtMjJlMC00YTRiLWJjZGYtM2VjMGNhNDJiMzNi"
+    });
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      setState(() {
+        Alltasklist = jsonData;
+        // print("${Alltasklist[0]}");
+        // print('${Alltasklist[0]['name']}') ;
+      });
+    }
+  }
+  void updatetask(context){
+  Task_Req updateTask= Task_Req();
+  updateTask.startTime = startTimeController.text;
+  updateTask.endTime = endTimeController.text;
+  updateTask.startedDate= dateInputController.text;
+  updateTask.clockifyProjectId = Projectvalue;
+  updateTask.clockifyTaskId = Listvalue ;
+  updateTask.taskDescription= descriptionController.text;
+  var api = Provider.of<ApiService>(context, listen: false);
+   print('update id1--${widget.dailyTimeId}');
+  api.updatetask(widget.dailyTimeId!, updateTask).then((response){
+    if(response.status==true){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskList(),));
+    }
+
+  });
+  print('update id--${widget.dailyTimeId}');
+  
+}
+
+
+
+
 }

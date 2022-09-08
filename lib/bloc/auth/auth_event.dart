@@ -23,6 +23,9 @@ class SignUpRequested extends AuthEvent {
 
 // When the user signing in with google this event is called and the [AuthRepository] is called to sign in the user
 class GoogleSignInRequested extends AuthEvent {
+  BuildContext? context;
+
+  GoogleSignInRequested(this.context);
     // late final String displayName;
     // late final String email;
     // GoogleSignInRequested(this.email,this.displayName);

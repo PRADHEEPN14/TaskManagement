@@ -47,6 +47,13 @@ dependencies:
   flutter_linkify:
   url_launcher:
   dio: ^4.0.6
+  cuberto_bottom_bar: ^2.0.0
+  animated_text_kit: ^4.2.2
+  pretty_dio_logger: ^1.2.0-beta-1
+  retrofit: ^3.0.1+1
+  retrofit_generator: ^4.0.3+1
+  http: ^0.13.5
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +65,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  build_runner: ^2.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

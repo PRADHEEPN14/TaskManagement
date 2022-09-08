@@ -17,14 +17,14 @@ class _SplashscreenState extends State<Splashscreen> {
 @override
 void initState(){
   super.initState();
-  Future.delayed(const Duration (seconds: 4),(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SignIn(),));
-
+  if(mounted){
+    setState(() {
+     Future.delayed(const Duration (seconds: 4),(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SignIn(),)); 
   });
+});
     
-
-  
-  
+  } 
 }
 
 

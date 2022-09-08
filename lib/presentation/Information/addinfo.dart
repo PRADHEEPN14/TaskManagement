@@ -1,8 +1,15 @@
 // import 'package:email_validator/email_validator.dart';
+import 'package:bloc_auth/preference_helper.dart';
+// import 'package:bloc_auth/services/model/update_profile_req.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../services/Apiservices/ApiService.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/model/update_profile.dart';
 
 
 
@@ -39,17 +46,11 @@ String? selectedValue;
   TextEditingController userRoleController = TextEditingController();
   TextEditingController mobilenumController = TextEditingController();
   TextEditingController ApikeyController = TextEditingController();
+  int? userId;
+  String? userToken;
 
 
-
-
-  final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
-  final _dropdownFormKey = GlobalKey<FormState>();
-
-  
-  @override
-  Widget build(BuildContext context) {
-    void showSnackBar(BuildContext context,String message) {
+  void showSnackBar(BuildContext context,String message) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: Color(0xFFED4B1E),
@@ -59,12 +60,46 @@ String? selectedValue;
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
+  final _dropdownFormKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserId();    
+  }
+
+  getUserId()async{
     
+        userId = await PreferenceHelper.getUserId();  
+  print("userid--$userId");
+  
+  }
+  getToken()async{
+    userToken = await PreferenceHelper.getToken();
+    print('userToken');
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+
+     return Provider(create: (context) => ApiService.create(),
+    child: Scaffold(
+    resizeToAvoidBottomInset: false,
+      body: Builder(builder: (BuildContext context) {
+        return AddInfoPage(context);
+      }),
+         )
+       );
+        
+  }
+   AddInfoPage (BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
             title:const Center(child:  Text('Update profile')),
-            backgroundColor: Colors.deepOrange,
+            backgroundColor: Colors.redAccent,
             shape:const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.0))),
             
           ),
@@ -93,6 +128,7 @@ String? selectedValue;
                          borderRadius: BorderRadius.circular(10),
                            validator:(selectedValue)=>selectedValue == null? "select Role":null,
                            autovalidateMode: AutovalidateMode.always,
+                           
                            
                            isExpanded: true,
                            // value: selectedValue,
@@ -169,9 +205,11 @@ String? selectedValue;
                           // print(emailController.text);
                           print("End--${selectedValue}");
                           print("num1--${mobilenumController.text.length}");
+                          print("userID--$userId");
                             
                             if((ApikeyController.text!='')&&(mobilenumController.text.length==10)&&(selectedValue !=null)){
                             showSnackBar(context, "Task updated Sucessfully...!");
+                            updateuser(context);
                             print("num-3-${mobilenumController.text.length}");
                           }
                           //  else if(mobilenumController.text.length<10){
@@ -199,6 +237,20 @@ String? selectedValue;
       ),
     );
     
+  }
+
+  void updateuser(context){
+    print(userId);
+    Update_Req updateData = Update_Req();
+     updateData.mobileNo = mobilenumController.text;
+     updateData.designation = selectedValue;
+     updateData.clockifyApiKey = ApikeyController.text;
+    var api = Provider.of<ApiService>(context, listen: false);
+    api.updateuser(userId!,updateData).then((response){
+     print(response);
+    //  print(object)
+    }
+    );
   }
  
 

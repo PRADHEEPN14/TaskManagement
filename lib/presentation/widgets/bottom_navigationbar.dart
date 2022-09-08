@@ -1,7 +1,6 @@
-import 'package:bloc_auth/presentation/Information/addinfo.dart';
+import 'package:bloc_auth/presentation/Home/home_page.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
 import 'package:bloc_auth/presentation/TaskList/task_list.dart';
-import 'package:bloc_auth/presentation/TaskList/tasklist_page.dart';
 import 'package:flutter/material.dart';
 
 
@@ -23,8 +22,10 @@ class _BottomNaviagateState extends State<BottomNaviagate> {
   });
 }
 static const List<Widget> _pages = <Widget>[
+HomePage(),
 TaskPage(),
-TaskList()
+TaskList(),
+
 
 
 
@@ -39,21 +40,28 @@ TaskList()
       
       bottomNavigationBar:
         BottomNavigationBar(
-          backgroundColor:Colors.deepOrange,
+          // showUnselectedLabels: false,
+          showSelectedLabels: true,
+          selectedItemColor: Colors.white,
+          backgroundColor:Colors.redAccent,
           selectedIconTheme:const IconThemeData(color: Colors.white),
-          selectedLabelStyle:const TextStyle(decorationColor: Colors.amber),
+          selectedLabelStyle:const TextStyle(color: Colors.red),
           selectedFontSize: 15,
           elevation: 10,
           
     items: const <BottomNavigationBarItem>[
      
-         
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home_filled),
+        label: 'Home',
+        
+      ),
       BottomNavigationBarItem(
         icon: Icon(Icons.add_task),
         label: 'Task',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.list_outlined),
+        icon: Icon(Icons.list_sharp),
         label: 'TaskList',
       ),
      

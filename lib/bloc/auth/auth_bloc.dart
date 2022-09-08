@@ -1,8 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_auth/data/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
+
+import '../../preference_helper.dart';
+import '../../services/Apiservices/ApiService.dart';
+import '../../services/model/profile_request.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/model/profile_response.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -38,9 +46,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleSignInRequested>((event, emit) async {
       emit(Loading());
       try {
-         await authRepository.signInWithGoogle();
-        print("Signout");
-        emit(Authenticated());
+        GoogleSignInAccount? googleUser = await authRepository.signInWithGoogle(event.context!);
+       GoogleLogin_Res data = await  googlelogin(event.context, googleUser,emit);
+
+       if(data != null){
+            emit(Authenticated());
+       }
+        
+       // emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));
         emit(UnAuthenticated());
@@ -53,4 +66,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(UnAuthenticated());
     });
   }
+
+     Future<GoogleLogin_Res> googlelogin(BuildContext? context,GoogleSignInAccount? googleUser,Emitter<AuthState> emit) async{
+    GoogleLogin_Req UserData = GoogleLogin_Req();
+    GoogleLogin_Res result = GoogleLogin_Res();
+    UserData.email= googleUser!.email;
+    UserData.fullName=googleUser!.displayName;
+    var api = Provider.of<ApiService>(context!, listen: false);
+    await api.googlelogin(UserData).then((response)async{
+      
+     if(response != null && response.token!=null) {
+      await PreferenceHelper.saveToken(response.token!);
+      
+      await PreferenceHelper.saveUserId(response.data!.user_id!);
+      
+      print("userid-222${response.data!.user_id!}");
+      print("userid-00${response.token}");
+      
+      // emit(Authenticated()); 
+     }else{
+      //emit(UnAuthenticated());
+     }
+
+    });
+
+    return result;
+
+  }
+
 }
