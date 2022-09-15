@@ -10,12 +10,11 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Getting the user from the FirebaseAuth Instance
-    // final user = FirebaseAuth.instance.currentUser!;
-    return const BottomNaviagate();
-        
-      
-        
+
+ // User login sucessfull this dashboard page will be shown..
+ // and BottomNaviagte function to use show the Pages...
+
+    return BottomNaviagate();
   }
 }
 

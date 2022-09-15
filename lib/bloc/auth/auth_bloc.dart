@@ -3,7 +3,6 @@ import 'package:bloc_auth/data/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
 
 import '../../preference_helper.dart';
 import '../../services/Apiservices/ApiService.dart';
@@ -51,21 +50,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
        if(data != null){
             emit(Authenticated());
+            // print(data);
        }
         
-       // emit(Authenticated());
+      //  emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));
         emit(UnAuthenticated());
       }
     });
+
+
     // When User Presses the SignOut Button, we will send the SignOutRequested Event to the AuthBloc to handle it and emit the UnAuthenticated State
     on<SignOutRequested>((event, emit) async {
       emit(Loading());
+      await PreferenceHelper.clearStorage();
       await authRepository.signOut();
+
       emit(UnAuthenticated());
     });
   }
+
+
+ // <<<<<<<<<<<<<<<<<<<<< Google login function here..>>>>>>>>>>>>>>>>
 
      Future<GoogleLogin_Res> googlelogin(BuildContext? context,GoogleSignInAccount? googleUser,Emitter<AuthState> emit) async{
     GoogleLogin_Req UserData = GoogleLogin_Req();
@@ -73,6 +80,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     UserData.email= googleUser!.email;
     UserData.fullName=googleUser!.displayName;
     var api = Provider.of<ApiService>(context!, listen: false);
+    print(UserData.email);
+    print(UserData.fullName);
     await api.googlelogin(UserData).then((response)async{
       
      if(response != null && response.token!=null) {
@@ -81,11 +90,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await PreferenceHelper.saveUserId(response.data!.user_id!);
       
       print("userid-222${response.data!.user_id!}");
-      print("userid-00${response.token}");
+      print("userid-00${response.token!}");
       
       // emit(Authenticated()); 
      }else{
-      //emit(UnAuthenticated());
+      // emit(UnAuthenticated());
      }
 
     });
@@ -93,5 +102,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return result;
 
   }
+ // <<<<<<<<<<<<<<<<<<<<< end here..>>>>>>>>>>>>>>>>
 
 }

@@ -3,11 +3,12 @@ import 'dart:ui';
 import 'package:bloc_auth/bloc/auth/auth_bloc.dart';
 // import 'package:bloc_auth/bloc/bloc/auth_bloc.dart';
 import 'package:bloc_auth/presentation/Dashboard/dashboard.dart';
-import 'package:bloc_auth/services/model/profile_request.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/Apiservices/ApiService.dart';
@@ -22,10 +23,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 // final user = FirebaseAuth.instance.currentUser!;
   var ctx;
-  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
 
   @override
   void dispose() {
@@ -36,8 +35,9 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<ApiService>(create: (context) => ApiService.create(),
-    child: Scaffold(
+    return Provider<ApiService>(
+        create: (context) => ApiService.create(),
+        child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Builder(
             builder: (BuildContext newContext) {
@@ -45,11 +45,11 @@ class _SignInState extends State<SignIn> {
             },
           ),
         ));
-    }
- SignIn(BuildContext context) {
-  ctx = context;
+  }
+
+  SignIn(BuildContext context) {
+    ctx = context;
     return Scaffold(
-      
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
@@ -58,9 +58,9 @@ class _SignInState extends State<SignIn> {
                 MaterialPageRoute(builder: (context) => const Dashboard()));
           }
           if (state is AuthError) {
-            // Showing the error message if the user has entered invalid credentials
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+            // Showing the error message if the user has entered invalid credentials //state.error//
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Something went wrong try Again..')));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(
@@ -68,25 +68,34 @@ class _SignInState extends State<SignIn> {
             if (state is Loading) {
               // Showing the loading indicator while the user is signing in
               return const Center(
-                child: CircularProgressIndicator(),
-                
-              );
+                  child:SizedBox(
+                    width: 65,
+                    height: 40,
+                    child: LoadingIndicator(
+                    indicatorType: Indicator.lineScalePulseOutRapid,
+                    colors: [
+                      Colors.yellow,
+                      Colors.black,
+                      Colors.blue,
+                      Colors.deepPurple,
+                      Colors.pink
+                    ],
+                    strokeWidth: 10,
+                    pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
+              ));
             }
             if (state is UnAuthenticated) {
               // Showing the sign in form if the user is not authenticated
-              return Container(width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color(0xFF2A94EA),
-                Color(0xFF1649A2),
-                Color(0xFF13AEF5),
-              ],
-              begin: Alignment.topRight,
-              end:Alignment.bottomLeft )
-            ),
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Color(0xFF2A94EA),
+                  Color(0xFF1649A2),
+                  Color(0xFF13AEF5),
+                ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
                 child: Center(
-                  
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: SingleChildScrollView(
@@ -94,43 +103,32 @@ class _SignInState extends State<SignIn> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                         Container(
-                          
-                          
-                          width: 250,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            
-                            color: const Color(0xFFFBFCFC),
-                            borderRadius:const BorderRadius.all(Radius.circular(10.0)),
-                            border: Border.all(color: const Color(0xFFF8F8F9)),
-                            // gradient: LinearGradient(colors:[Color(0xFFD755EE),Color(0xFFE2DFDE),Color(0xFF0E85E6)],begin: Alignment.topRight,end: Alignment.bottomLeft),
-                            image:const DecorationImage(image: 
-                            AssetImage('images/skein_logo.png'),
-                            fit: BoxFit.none
-                            
-                            // AssetImage('images/skein_logo.png'),fit: BoxFit.contain
-                            )
+                          Container(
+                            width: 250,
+                            height: 120,
+                            decoration: BoxDecoration(
+                                color: const Color(0xFFFBFCFC),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
+                                border:
+                                    Border.all(color: const Color(0xFFF8F8F9)),
+                                image: const DecorationImage(
+                                    image: AssetImage('images/skein_logo.png'),
+                                    fit: BoxFit.none
+                                    )),
                           ),
-                         ),
-                          const SizedBox(
-                            height: 18,
-                          ),
-                         
+                          const SizedBox(height: 18),
                           Padding(
                             padding: const EdgeInsets.all(25.0),
-                            child: SignInButton(  
-                            Buttons.GoogleDark,
-                             onPressed: () {
-                              _authenticateWithGoogle(context);
-                           //   googlelogin(context);
-                             },
-                             ),
+                            child: SignInButton(
+                              Buttons.GoogleDark,
+                              onPressed: () {
+                                // google signin function..
+                                _authenticateWithGoogle(context);
+                                
+                              },
+                            ),
                           ),
-                          
-                  
-                            
-                         
                         ],
                       ),
                     ),
@@ -159,15 +157,4 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  // void googlelogin(context){
-  //   GoogleLogin_Req UserData = GoogleLogin_Req();
-  //   // UserData.email = user.email;
-  //   // UserData.fullName = user.displayName;
-  //   var api = Provider.of<ApiService>(ctx, listen: false);
-  //   api.googlelogin(UserData).then((response){
-  //     print(response);
-
-  //   });
-
-  // }
 }

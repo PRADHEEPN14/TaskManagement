@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-String? token ='';
+
 
 class PreferenceHelper {
   
   static clearStorage() async {
     // Delete all
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    await prefs.clear();
   }
 
   static saveToken(String token) async {
@@ -39,7 +39,7 @@ class PreferenceHelper {
   static Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? value = prefs.getString('token');
-    if (value!.isEmpty) {
+    if (value == null ||  value.isEmpty) {
       return null;
     } else {
       return value;

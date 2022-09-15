@@ -1,7 +1,7 @@
 class GoogleLogin_Res {
   bool? status;
   String? message;
-  loginData? data;
+  Data? data;
   String? token;
 
   GoogleLogin_Res({this.status, this.message, this.data, this.token});
@@ -9,7 +9,7 @@ class GoogleLogin_Res {
   GoogleLogin_Res.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new loginData.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     token = json['token'];
   }
 
@@ -25,15 +25,15 @@ class GoogleLogin_Res {
   }
 }
 
-class loginData {
+class Data {
   String? fullName;
   String? email;
   Null? fcmToken;
   int? user_id;
 
-  loginData({this.fullName, this.email, this.fcmToken, this.user_id});
+  Data({this.fullName, this.email, this.fcmToken, this.user_id});
 
-  loginData.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     fullName = json['full_name'];
     email = json['email'];
     fcmToken = json['fcm_token'];

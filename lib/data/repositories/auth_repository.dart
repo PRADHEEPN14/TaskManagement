@@ -62,10 +62,8 @@ class AuthRepository {
        if(googleUser != null){
       print('${googleUser}');
       print('NAME==${googleUser!.displayName}');
-    //print('EMAIL==${googleUser.email}');
+      print('EMAIL==${googleUser.email}');
      // googlelogin(context!,googleUser);
-       }else{
-
        }
       
       
@@ -82,6 +80,8 @@ class AuthRepository {
     
   }
 
+ // <<<<<<<<<<<<<<<<<<<<< google login repository code here..>>>>>>>>>>>>>>>>
+
   void googlelogin(BuildContext? context,GoogleSignInAccount? googleUser){
     GoogleLogin_Req UserData = GoogleLogin_Req();
     UserData.email= googleUser!.email;
@@ -90,7 +90,11 @@ class AuthRepository {
     api.googlelogin(UserData).then((response)async{
      if(response != null && response.token!=null) {
        
-      await PreferenceHelper.saveToken(response.token!);
+       await PreferenceHelper.saveToken(response.token!);
+        await PreferenceHelper.saveUserId(response.data!.user_id!);
+        print(response.data!.user_id!);
+       print('ttttt${response.token!}');
+      
       print(response);
      }
     });
@@ -104,6 +108,8 @@ class AuthRepository {
       throw Exception(e);
     }
   }
+  
+// <<<<<<<<<<<<<<<<<<<<< end here..>>>>>>>>>>>>>>>>
 
   
 }
