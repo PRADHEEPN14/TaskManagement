@@ -42,6 +42,8 @@ class Data {
   String? createdAt;
   String? updatedAt;
   String? startedDate;
+  String? projectName;
+  String? taskName;
 
   Data(
       {this.dailyEntryId,
@@ -57,7 +59,9 @@ class Data {
       this.endTime,
       this.createdAt,
       this.updatedAt,
-      this.startedDate});
+      this.startedDate,
+      this.projectName,
+      this.taskName});
 
   Data.fromJson(Map<String, dynamic> json) {
     dailyEntryId = json['daily_entry_id'];
@@ -74,6 +78,8 @@ class Data {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     startedDate = json['started_date'];
+    projectName = json['project_name'];
+    taskName = json['task_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +98,8 @@ class Data {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['started_date'] = this.startedDate;
+    data['project_name'] = this.projectName;
+    data['task_name'] = this.taskName;
     return data;
   }
 }

@@ -112,7 +112,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.only(top: 0),
+        padding: const EdgeInsets.only(top: 20),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -129,39 +129,44 @@ class _EditTaskPageState extends State<EditTaskPage> {
                 children: [
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        height: 70,
-                        child: TextFormField(
-                          onTap: Timepick,
-                          textInputAction: TextInputAction.next,
-                          controller: startTimeController,
-                          autovalidateMode: AutovalidateMode.always,
-                          maxLength: 5,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)),
-                            hintText: "10:00",
-                            label: Text("Start time"),
-                            labelStyle: TextStyle(color: Color.fromARGB(255, 29, 6, 111),fontWeight: FontWeight.w500,fontSize: 20),
-                            ),
-
-                          validator: (value) {
-                            startTime = value!;
-                            if (startTime.isEmpty) {
-                              return "enter time";
-                            } else if (startTime.length < 5) {
-                              return "Invalid time";
-                            }
-                          },
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: 70,
+                          child: TextFormField(
+                            inputFormatters: [maskFormatter],
+                            onTap: Timepick,
+                            textInputAction: TextInputAction.next,
+                            controller: startTimeController,
+                            autovalidateMode: AutovalidateMode.always,
+                            maxLength: 5,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)),
+                              hintText: "10:00",
+                              label: Text("Start time"),
+                              labelStyle: TextStyle(color: Color.fromARGB(255, 29, 6, 111),fontWeight: FontWeight.w500,fontSize: 20),
+                              ),
+                      
+                            validator: (value) {
+                              startTime = value!;
+                              if (startTime.isEmpty) {
+                                return "enter time";
+                              } else if (startTime.length < 5) {
+                                return "Invalid time";
+                              }
+                            },
+                          ),
                         ),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: 70,
                         child: TextFormField(
+                          inputFormatters: [maskFormatter],
                           onTap: Timepicker,
                           textInputAction: TextInputAction.next,
                           controller: endTimeController,
@@ -335,7 +340,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           (Projectvalue != "" || Projectvalue != null) &&
                           (Listvalue != "" || Listvalue != null) &&
                           (descriptionController.text != "") &&
-                          (dateInputController.text != "")) {
+                          (dateInputController.text != "")
+                           &&(startTime != endTime)) {
                         //if print some value what we entered in your text field...
                         print("start--$startTime");
                         print("end--$endTime");
@@ -380,7 +386,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       print(formattedTime);
 
       setState(() {
-        startTimeController.text = formattedTime;
+        startTimeController.text = pickedTime.format(context);
       });
     } else {
       print("Time is not selected");
@@ -399,7 +405,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       print(formattedTime);
       //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
-        endTimeController.text = formattedTime;
+        endTimeController.text = pickedTime.format(context);
       });
     } else {
       print("Time is not selected");

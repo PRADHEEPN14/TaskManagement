@@ -76,7 +76,7 @@ class _AddInfoState extends State<AddInfoPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text('Update profile')),
+          title: const Center(child: Text('Additional Infomation')),
           backgroundColor: Colors.deepPurple,
           shape: const RoundedRectangleBorder(
               borderRadius:
@@ -168,7 +168,7 @@ class _AddInfoState extends State<AddInfoPage> {
                       ),
                       SizedBox(
                         child: TextFormField(
-                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))],
+                          // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))],
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textInputAction: TextInputAction.next,
                           controller: ApikeyController,

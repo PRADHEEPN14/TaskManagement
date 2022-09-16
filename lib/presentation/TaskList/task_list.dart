@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+// import 'dart:html';
+
 import 'package:bloc_auth/presentation/Home/home_page.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
@@ -22,11 +24,14 @@ class _TaskListState extends State<TaskList> {
   bool isLoading = true;
 //  late int dailyEntryId;
 
+TextEditingController firstTime =   TextEditingController();
+
   List<Data>? AllTask;
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((_) => alltask());
     super.initState();
+  
     // alltask();
   }
 
@@ -74,82 +79,153 @@ class _TaskListState extends State<TaskList> {
                   itemCount: AllTask!.length,
                   itemBuilder: ((context, i) {
                     // Using CARD design...
-                    return Card(
-                      elevation: 3,
-                      surfaceTintColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      shadowColor: Color.fromARGB(255, 122, 168, 206),
-                      child: ListTile(
-                        trailing: PopupMenuButton(
-                            onSelected: (value) async {
-                              if (value == 1) {
-                                await edittask(
-                                  AllTask![i].dailyEntryId!,
-                                  AllTask![i].startTime,
-                                  AllTask![i].endTime,
-                                  AllTask![i].startedDate,
-                                  AllTask![i].clockifyProjectId,
-                                  AllTask![i].clockifyTaskId,
-                                  AllTask![i].taskDescription,
-                                );
-                                // setState(() {
-                                //   alltask();
-                                // });
-                              } else if (value == 2) {
-                                deletetask(AllTask![i].dailyEntryId!);
-                                 setState(() {
-                              alltask();
-                              }); 
-                              }
-                              
-                              
-                            },
-                            itemBuilder: (context) => [
-                                  const PopupMenuItem(
-                                    child: Text("Edit"),
-                                    value: 1,
-                                  ),
-                                  const PopupMenuItem(
-                                    child: Text("Delete"),
-                                    value: 2,
-                                  ),
-                                ]),
-                        // trailing: IconButton(onPressed: (){},
-                        // icon: Icon(Icons.more_vert)),
-                        title: Text(
-                          '${AllTask![i].taskDescription}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text('${AllTask![i].createdAt}',
-                            style: const TextStyle(color: Color.fromARGB(255,139,139,138,),
-                                fontSize: 13)),
-                                leading: TextButton(onPressed: (){
-                                  
-                              showDialog(context: context, builder: (BuildContext context){
-                              return   Dialog(
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8,right: 8,top: 3),
+                      child: Card(
+                        color: Color(0xFFF3F3F3),
+                        elevation: 10,
+                        surfaceTintColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        shadowColor: Color(0xFF00294B),
+                        child: ListTile(
+                          trailing: PopupMenuButton(
+                              onSelected: (value) async {
+                                if (value == 1) {
+                                  await edittask(
+                                    AllTask![i].dailyEntryId!,
+                                    AllTask![i].startTime,
+                                    AllTask![i].endTime,
+                                    AllTask![i].startedDate,
+                                    AllTask![i].clockifyProjectId,
+                                    AllTask![i].clockifyTaskId,
+                                    AllTask![i].taskDescription,
+                                  );
+                                  // setState(() {
+                                  //   alltask();
+                                  // });
+                                } else if (value == 2) {
+                                  deletetask(AllTask![i].dailyEntryId!);
+                                   setState(() {
+                                alltask();
+                                }); 
+                                }
                                 
-                                shape: RoundedRectangleBorder(
-                                      borderRadius:BorderRadius.circular(20.0)),
-                                child:Center(
-                                  child: Column(
-                                    children: const [
-                                      Text('data'),
-                                      Text('data'),
-                                      Text('data'),
-                                      Text('data'),
-                                      Text('data'),
-                                      Text('data'),
-                                      Text('data'),
                                 
-                                    ],
-                                  ),
-                                ),
-                                );
-                            });
                               },
-                         child:const Icon(Icons.remove_red_eye_sharp,
-                         color: Colors.purple,)),
+                              itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      child: Text("Edit"),
+                                      value: 1,
+                                    ),
+                                    const PopupMenuItem(
+                                      child: Text("Delete"),
+                                      value: 2,
+                                    ),
+                                  ]),
+                          // trailing: IconButton(onPressed: (){},
+                          // icon: Icon(Icons.more_vert)),
+                          title: Text(
+                            '${AllTask![i].taskDescription}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text('${AllTask![i].projectName}|| ${AllTask![i].taskName}',
+                              style: const TextStyle(color: Colors.black,
+                                  fontSize: 12)),
+                                  leading: TextButton(onPressed: (){
+                                    
+                                showDialog(context: context, builder: (BuildContext context){
+                                return   Dialog(
+                                  insetPadding: EdgeInsets.all(10),
+                                  backgroundColor: Colors.deepPurple,
+                                  
+                                  shape: RoundedRectangleBorder(
+                                        borderRadius:BorderRadius.circular(15.0)),
+                                  child:Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                        width: 500,height:500,
+                                        child: Column(
+                                          children: [
+                                            Column(
+                                              children: [
+                                           
+                                                
+                                             TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'Start Time:  ${AllTask![i].startTime}',
+                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5),
+                                                    
+                                                    enabled: false,
+                                                    
+                                       ),
+                                                
+                                       SizedBox(height: 10),
+                                        TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'End Time:  ${AllTask![i].endTime}',
+                                                    hintStyle:TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5),
+                                                    
+                                       ),
+                                       SizedBox(height: 10),
+                                        TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'Date:  ${AllTask![i].startedDate}',
+                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5),
+                                                    
+                                       ),
+                                       SizedBox(height: 10),
+                                        TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'Project:   ${AllTask![i].projectName}',
+                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5),
+                                                    
+                                       ),
+                                       SizedBox(height: 10),
+                                        TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'Task:  ${AllTask![i].taskName}',
+                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5),
+                                                    
+                                       ),
+                                       SizedBox(height: 10),
+                                        TextField(
+                                                decoration: InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                    hintText: 'Description:  ${AllTask![i].taskDescription}',
+                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
+                                                    hintMaxLines: 5
+                                                    ),
+                                                    
+                                       ),
+                                       
+                                                          
+                                              ],
+                                            ),
+                                                         
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  );
+                              });
+                                },
+                           child:const Icon(Icons.remove_red_eye_sharp,
+                           color: Colors.deepPurple,
+                           size: 18,)),
+                        ),
                       ),
                     );
                   })),

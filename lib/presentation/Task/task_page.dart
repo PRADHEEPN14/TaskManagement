@@ -52,12 +52,12 @@ class _TaskPageState extends State<TaskPage> {
       print(pickedTime.format(context));
       DateTime parsedTime =DateFormat.jm().parse(pickedTime.format(context).toString());
       //converting to DateTime so that we can further format on different pattern.
-      print(parsedTime);
+      print('time--$parsedTime');
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
-      print(formattedTime);
+      print('time2--$formattedTime');
 
       setState(() {
-        startTimeController.text = formattedTime;
+        startTimeController.text = pickedTime.format(context);
       });
     } else {
       print("Time is not selected");
@@ -71,12 +71,12 @@ class _TaskPageState extends State<TaskPage> {
       print(pickedTime.format(context));
       DateTime parsedTime =DateFormat.jm().parse(pickedTime.format(context).toString());
       //converting to DateTime so that we can further format on different pattern.
-      print(parsedTime);
+      print('time111---$parsedTime');
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
-      print(formattedTime);
+      print('time22--$formattedTime');
       //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
-        endTimeController.text = formattedTime;
+        endTimeController.text = pickedTime.format(context);
       });
     } else {
       print("Time is not selected");
@@ -165,7 +165,7 @@ class _TaskPageState extends State<TaskPage> {
                 ),
 
                 body: Padding(
-                  padding: const EdgeInsets.only(top: 2),
+                  padding: const EdgeInsets.only(top: 15),
                   child: Container(
                     // decoration: const BoxDecoration(
                     //     gradient: LinearGradient(colors: [
@@ -182,41 +182,44 @@ class _TaskPageState extends State<TaskPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Container(
-                                  width:MediaQuery.of(context).size.width * 0.4,
-                                  height: 70,
-                                  child: TextFormField(
-                                    textInputAction: TextInputAction.next,
-                                    controller: startTimeController,
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    validator: (value) {
-                                      startTime = value!;
-
-                                      if (startTime!.isEmpty) {
-                                        return "enter time";
-                                      } else if (startTime!.length < 5) {
-                                        return "Invalid time";
-                                      }
-                                    },
-                                    maxLength: 5,
-                                    maxLines: 1,
-                                    decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
-                                    borderSide:BorderSide(color: Colors.blue)),
-                                    hintText: "10:00",
-                                    label: Text("start time"),
-                                    labelStyle: TextStyle(
-                                      color:Color.fromARGB(255, 29, 6, 111),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20)),
-                                    readOnly: true,
-                                    onTap: Timepick,
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                    width:MediaQuery.of(context).size.width * 0.4,
+                                    height: 70,
+                                    child: TextFormField(
+                                      inputFormatters: [maskFormatter],
+                            onTap: Timepick,
+                            textInputAction: TextInputAction.next,
+                            controller: startTimeController,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            maxLength: 8,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)),
+                              hintText: "10:00",
+                              label: Text("Start time"),
+                              labelStyle: TextStyle(color: Color.fromARGB(255, 29, 6, 111),fontWeight: FontWeight.w500,fontSize: 20),
+                              ),
+                      
+                            validator: (value) {
+                              startTime = value!;
+                              if (startTime!.isEmpty) {
+                                return "enter time";
+                              } else if (startTime!.length < 5) {
+                                return "Invalid time";
+                              }
+                            },
+                          ),
                                   ),
                                 ),
                                 Container(
                                   width:MediaQuery.of(context).size.width * 0.4,
                                   height: 70,
                                     child: TextFormField(
+                                      inputFormatters: [maskFormatter],
                                       textInputAction: TextInputAction.next,
                                       controller: endTimeController,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -228,7 +231,7 @@ class _TaskPageState extends State<TaskPage> {
                                         return "Invalid time";
                                       }
                                     },
-                                    maxLength: 5,
+                                    maxLength: 8,
                                     maxLines: 1,
                                     onTap: Timepicker,
                                     decoration: const InputDecoration(
@@ -386,27 +389,29 @@ class _TaskPageState extends State<TaskPage> {
                                 ),
                               ]),
                             ),
+                              SizedBox(height: 70,),
                             ElevatedButton(
                               onPressed: () {
-                                print("start--$startTime");
-                                print("end--$endTime");
-                                print("des${descriptionController.text}");
-                                print("date${dateInputController.text}");
-                                print("list--$dropdownvalue");
-                                print("project--$dropdownvalue1");
+                               
 
-                                if ((startTime != ""||startTime != null) &&
-                                    (endTime != ""||endTime != null) &&
-                                    (startTime!.length > 4) &&
-                                    (endTime.length > 4) &&
+                                if ((startTimeController.text !=""||startTimeController.text != null) &&
+                                    (endTimeController.text != ""||endTimeController.text != null) &&
+                                    (startTimeController.text.length < 9) &&
+                                    (endTimeController.text.length < 9) &&
                                     (dropdownvalue != "" ||
                                         dropdownvalue != null) &&
                                     (dropdownvalue1 != "" ||
                                         dropdownvalue1 != null) &&
                                     (descriptionController.text != "") &&
                                     (dateInputController.text != "")
-                                    &&(startTime != endTime)) {
+                                    &&(startTimeController.text != endTimeController.text)) {
                                   print("valid form");
+                                   print("start--${startTimeController.text}");
+                                print("end--${endTimeController.text}");
+                                print("des${descriptionController.text}");
+                                print("date${dateInputController.text}");
+                                print("list--$dropdownvalue");
+                                print("project--$dropdownvalue1");
 
                                   //API function.... here...
                                   createtask(context);
@@ -414,6 +419,7 @@ class _TaskPageState extends State<TaskPage> {
                                   showSnackBar(context, "Please enter valid time");
                                 }
                                  else {
+                                  print('hi');
                                   showSnackBar(context, "Please enter all fields.");
                                 }
                               },
@@ -512,11 +518,11 @@ List Alltasklist = [];
         print(response.message);
         showSnackBar(context, '${response.message}');
       } else if(response.message== "Internal server error. Please try again later !"){
-         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => BottomNaviagate(screenindex: 0,)),
-        );
-        showSnackBar(context, 'Something Went wrong Try later');
+        //  Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(
+        //       builder: (context) => BottomNaviagate(screenindex: 0,)),
+        // );
+        showSnackBar(context, 'Entered time not valid please check!');
        
       }
       else {

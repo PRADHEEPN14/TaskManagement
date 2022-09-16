@@ -62,11 +62,11 @@ class _HomePageState extends State<HomePage> {
                     width: 350.0,
                     height: 95,
                     decoration: BoxDecoration(
-                                color: Colors.redAccent,
+                                // color: Colors.redAccent,
                                 borderRadius: BorderRadius.circular(20)),
                                 child: Center(
                                 child: TextLiquidFill(
-                                  boxHeight: 85.0,
+                                  boxHeight: 95.0,
                                   boxWidth: 299,
                                   loadDuration: const Duration(seconds: 6),
                                   text: ' $message',
