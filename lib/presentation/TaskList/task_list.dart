@@ -6,6 +6,7 @@ import 'package:bloc_auth/presentation/Home/home_page.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 
 import '../../services/Apiservices/ApiService.dart';
 import 'package:provider/provider.dart';
@@ -53,20 +54,22 @@ TextEditingController firstTime =   TextEditingController();
       child: isLoading
           ? const Center(
               child: SizedBox(
-              width: 65,
+              width: 125,
               height: 40,
-              child: LoadingIndicator(
-                  indicatorType: Indicator.lineScalePulseOutRapid,
-                  colors: [
-                    Colors.yellow,
-                    Colors.black,
-                    Colors.blue,
-                    Colors.deepPurple,
-                    Colors.pink
-                  ],
-                  strokeWidth: 10,
-                  pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
-            ))
+              child: Text('No Task data found',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),)
+              // LoadingIndicator(
+              //     indicatorType: Indicator.lineScalePulseOutRapid,
+              //     colors: [
+              //       Colors.yellow,
+              //       Colors.black,
+              //       Colors.blue,
+              //       Colors.deepPurple,
+              //       Colors.pink
+              //     ],
+              //     strokeWidth: 10,
+              //     pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
+            )
+            )
           : Scaffold(
               appBar: AppBar(
                 title: const Center(child: Text('TaskList')),
@@ -137,7 +140,7 @@ TextEditingController firstTime =   TextEditingController();
                                 showDialog(context: context, builder: (BuildContext context){
                                 return   Dialog(
                                   insetPadding: EdgeInsets.all(10),
-                                  backgroundColor: Colors.deepPurple,
+                                  backgroundColor: Colors.white,
                                   
                                   shape: RoundedRectangleBorder(
                                         borderRadius:BorderRadius.circular(15.0)),
@@ -145,76 +148,71 @@ TextEditingController firstTime =   TextEditingController();
                                     padding: const EdgeInsets.all(20.0),
                                     child: SingleChildScrollView(
                                       child: Container(
-                                        width: 500,height:500,
-                                        child: Column(
-                                          children: [
-                                            Column(
-                                              children: [
-                                           
-                                                
-                                             TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'Start Time:  ${AllTask![i].startTime}',
-                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5),
-                                                    
-                                                    enabled: false,
-                                                    
-                                       ),
-                                                
-                                       SizedBox(height: 10),
-                                        TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'End Time:  ${AllTask![i].endTime}',
-                                                    hintStyle:TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5),
-                                                    
-                                       ),
-                                       SizedBox(height: 10),
-                                        TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'Date:  ${AllTask![i].startedDate}',
-                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5),
-                                                    
-                                       ),
-                                       SizedBox(height: 10),
-                                        TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'Project:   ${AllTask![i].projectName}',
-                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5),
-                                                    
-                                       ),
-                                       SizedBox(height: 10),
-                                        TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'Task:  ${AllTask![i].taskName}',
-                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5),
-                                                    
-                                       ),
-                                       SizedBox(height: 10),
-                                        TextField(
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    hintText: 'Description:  ${AllTask![i].taskDescription}',
-                                                    hintStyle: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),
-                                                    hintMaxLines: 5
-                                                    ),
-                                                    
-                                       ),
-                                       
-                                                          
-                                              ],
-                                            ),
-                                                         
-                                          ],
+                                        width: 500,height:400,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 22,
+                                                child: Center(
+                                                  child: Text("Task Details",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),),
+                                                )
+                                              ),
+                                              SizedBox(height: 10),
+                                               TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Start Time:  ${AllTask![i].startTime}',
+                                                  hintStyle: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5),
+                                                  
+                                                  enabled: false,
+                                                  ),
+                                              
+                                              SizedBox(height: 10),
+                                          TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'End Time:  ${AllTask![i].endTime}',
+                                                  hintStyle:TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5),
+                                                  enabled: false,),
+                                                                           SizedBox(height: 10),
+                                          TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Date:  ${AllTask![i].startedDate}',
+                                                  hintStyle: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5),
+                                                  enabled: false),
+                                                                           SizedBox(height: 10),
+                                          TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Project:   ${AllTask![i].projectName}',
+                                                  hintStyle: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5),
+                                                  enabled: false),
+                                                                           SizedBox(height: 10),
+                                          TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Task:  ${AllTask![i].taskName}',
+                                                  hintStyle: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5),
+                                                  enabled: false,),
+                                                                           SizedBox(height: 10),
+                                          TextField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Description:  ${AllTask![i].taskDescription}',
+                                                  hintStyle: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),
+                                                  hintMaxLines: 5,
+                                                  enabled: false,),
+                                                ),
+                                                           
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

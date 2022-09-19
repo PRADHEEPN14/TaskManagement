@@ -103,6 +103,11 @@ static const colorizeTextStyle = TextStyle(
                                       textStyle: colorizeTextStyle,
                                       colors: colorizeColors,
                                     ),
+                                     ColorizeAnimatedText(
+                                      'Go to Task Page',
+                                      textStyle: colorizeTextStyle,
+                                      colors: colorizeColors,
+                                    ),
                                   ],
                                   isRepeatingAnimation: true,
                              )

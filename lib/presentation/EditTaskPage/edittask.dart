@@ -140,7 +140,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                             textInputAction: TextInputAction.next,
                             controller: startTimeController,
                             autovalidateMode: AutovalidateMode.always,
-                            maxLength: 5,
+                            maxLength: 8,
                             maxLines: 1,
                             decoration: const InputDecoration(
                             filled: true,
@@ -155,7 +155,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                               startTime = value!;
                               if (startTime.isEmpty) {
                                 return "enter time";
-                              } else if (startTime.length < 5) {
+                              } else if (startTime.length < 7) {
                                 return "Invalid time";
                               }
                             },
@@ -171,7 +171,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           textInputAction: TextInputAction.next,
                           controller: endTimeController,
                           autovalidateMode: AutovalidateMode.always,
-                          maxLength: 5,
+                          maxLength: 8,
                           maxLines: 1,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(
@@ -183,7 +183,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                             endTime = value!;
                             if (endTime.isEmpty) {
                               return "enter time";
-                            } else if (endTime.length < 5) {
+                            } else if (endTime.length < 7) {
                               return "Invalid time";
                             }
                           },
@@ -335,8 +335,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       // is the condition for before Api call..
                       if ((startTime != "") &&
                           (endTime != "") &&
-                          (startTime.length > 4) &&
-                          (endTime.length > 4) &&
+                          (startTime.length < 8) &&
+                          (endTime.length < 8) &&
                           (Projectvalue != "" || Projectvalue != null) &&
                           (Listvalue != "" || Listvalue != null) &&
                           (descriptionController.text != "") &&
@@ -357,8 +357,27 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       }else if((startTime == endTime)){
                                   showSnackBar(context, "Please enter valid time");
                                 }
+                                  else if(startTime.isEmpty|| endTime.isEmpty){
+                                    showSnackBar(context, "Please enter time");
+                                  }
+                                  else if((startTime == endTime)){
+                                    showSnackBar(context, "Please enter valid time");
+                                  } 
+                                  else if((dateInputController.text.isEmpty)){
+                                    showSnackBar(context, "Please select Date");
+                                  } 
+                                  else if((Projectvalue == null)){
+                                    showSnackBar(context, "Please select project");
+                                  } 
+                                  else if((Listvalue == null)){
+                                    showSnackBar(context, "Please select project");
+                                  } 
+                    
+                                   else if((description.isEmpty)){
+                                    showSnackBar(context, "Please enter description");
+                                  } 
                        else {
-                        showSnackBar(context, "Please enter all fields.");
+                        // showSnackBar(context, "Please enter all fields.");
                       }
                     },
                     child: const Text("Update Task"),
