@@ -15,6 +15,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+// BG-color for text:...
+static const colorizeColors = [
+  Colors.purple,
+  Colors.blue,
+  Colors.yellow,
+  Colors.red,
+];
+// animation text size...
+static const colorizeTextStyle = TextStyle(
+  fontSize: 25.0,
+  fontFamily: 'Horizon',
+  fontWeight: FontWeight.bold
+);
+
+
   final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
@@ -25,9 +41,9 @@ class _HomePageState extends State<HomePage> {
     var message = '';
 
     if (timeNow <= 12) {
-      message = 'Good Morning ${user.displayName} Please update Your Task';
+      message = '${user.displayName}';
     } else if ((timeNow > 12) && (timeNow <= 16)) {
-      message = 'Good Afernoon ${user.displayName} Please update Your Task';
+      message = 'Good Afernoon ${user.displayName}';
     } else if ((timeNow > 16) && (timeNow < 20)) {
       message = 'Good Evening ${user.displayName}';
     } else {
@@ -43,47 +59,59 @@ class _HomePageState extends State<HomePage> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(15.0)))),
         body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                Center(
-                  child: Container(
-                      width: 350,
-                      height: 390,
-                        decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('images/skein_logo.png'),
-                            fit: BoxFit.none),
-                      )),
-                ),
-                Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 290),
+                child: Container(
+                    width: 150,
+                    height: 100,
+                      decoration: const BoxDecoration(
+                      
+                      image: DecorationImage(
+                          image: AssetImage('images/skein_logo.png'),
+                          fit: BoxFit.contain),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Center(
                   child: Container(
                     width: 350.0,
                     height: 95,
                     decoration: BoxDecoration(
-                                // color: Colors.redAccent,
+                      
                                 borderRadius: BorderRadius.circular(20)),
                                 child: Center(
-                                child: TextLiquidFill(
-                                  boxHeight: 95.0,
-                                  boxWidth: 299,
-                                  loadDuration: const Duration(seconds: 6),
-                                  text: ' $message',
-                                  waveColor: const Color(0xFF023183),
-                                  boxBackgroundColor: Colors.redAccent,
-                                  textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Bobbers'),
                                   
-                                ),
+                                child:AnimatedTextKit(
+                                    animatedTexts: [
+                                       
+                                    ColorizeAnimatedText(
+                                      'HI!!',
+                                      textStyle: colorizeTextStyle,
+                                      colors: colorizeColors,
+                                    ),
+                                    ColorizeAnimatedText(
+                                      '$message',
+                                      textStyle: colorizeTextStyle,
+                                      colors: colorizeColors,
+                                    ),
+                                    ColorizeAnimatedText(
+                                      'Please Update Your Task!!!',
+                                      textStyle: colorizeTextStyle,
+                                      colors: colorizeColors,
+                                    ),
+                                  ],
+                                  isRepeatingAnimation: true,
+                             )
+                                                            
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         drawer: MyDrawer(), // drawer widget user here...

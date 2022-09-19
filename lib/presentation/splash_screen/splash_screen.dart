@@ -53,13 +53,13 @@ class _SplashscreenState extends State<Splashscreen> {
                 width: 65,
                 height: 60,
                 child: LoadingIndicator(//loading design ...
-                    indicatorType: Indicator.pacman,
+                    indicatorType: Indicator.ballSpinFadeLoader,
                     colors: [
-                      Colors.pink,
-                      Colors.yellow,
-                      Colors.black,
-                      Colors.blue,
-                      Colors.deepPurple,
+                      Colors.white,
+                      // Colors.yellow,
+                      // Colors.black,
+                      // Colors.blue,
+                      // Colors.deepPurple,
                       
                     ],
                     strokeWidth: 10,
