@@ -105,7 +105,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     return SafeArea(
         child: Scaffold(
         appBar: AppBar(
-        title: const Center(child: Text('TaskManagement')),
+        title: const Center(child: Text('Edit Task')),
         backgroundColor: Colors.deepPurple,
         shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10.0))),
@@ -135,6 +135,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: 70,
                           child: TextFormField(
+                            enableInteractiveSelection: false,
                             inputFormatters: [maskFormatter],
                             onTap: Timepick,
                             textInputAction: TextInputAction.next,
@@ -166,6 +167,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: 70,
                         child: TextFormField(
+                          enableInteractiveSelection: false,
                           inputFormatters: [maskFormatter],
                           onTap: Timepicker,
                           textInputAction: TextInputAction.next,
@@ -507,7 +509,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     print('update id1--${widget.dailyTimeId}');
     api.updatetask(widget.dailyTimeId!, updateTask).then((response) {
       if (response.status == true) {
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (context) => BottomNaviagate(screenindex: 2)),
         );
