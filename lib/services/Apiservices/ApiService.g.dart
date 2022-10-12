@@ -68,19 +68,19 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<GoogleLogin_Res> updateuser(userId, body) async {
+  Future<Update_Res> updateuser(userId, body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<GoogleLogin_Res>(
+        _setStreamType<Update_Res>(
             Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'app/updateUser/${userId}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = GoogleLogin_Res.fromJson(_result.data!);
+    final value = Update_Res.fromJson(_result.data!);
     return value;
   }
 
