@@ -43,7 +43,7 @@ abstract class ApiService {
 
 
   @PUT("app/updateUser/{userId}")
-  Future<GoogleLogin_Res> updateuser(
+  Future<Update_Res> updateuser(
       @Path("userId") int userId, @Body() Update_Req body);
 
 
