@@ -136,8 +136,21 @@ class _TaskPageState extends State<TaskPage> {
 
   TaskPage(BuildContext context) {
     return SafeArea(
-        child: isLoading
-            ? const Center(
+        child: Scaffold(
+                appBar: AppBar(
+                  title: const Padding(
+                    padding: EdgeInsets.only(left: 70),
+                    child: Text('UpdateTask',textAlign: TextAlign.left),
+                  ),
+                  backgroundColor: Colors.deepPurple,
+                  shape: const RoundedRectangleBorder(
+                  borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(18.0))),
+                ),
+
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: isLoading ? const Center(
                 child: SizedBox(
                 width: 65,
                 height: 40,
@@ -155,25 +168,10 @@ class _TaskPageState extends State<TaskPage> {
                     pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
               ))
               // <<<<<<<<<<<<<<<<< End here...>>>>>>>>>>>>>>>>>>
-            : Scaffold(
-                appBar: AppBar(
-                  title: const Padding(
-                    padding: EdgeInsets.only(left: 70),
-                    child: Text('UpdateTask',textAlign: TextAlign.left),
-                  ),
-                  backgroundColor: Colors.deepPurple,
-                  shape: const RoundedRectangleBorder(
-                  borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(18.0))),
-                ),
-
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: SingleChildScrollView(
-                    
-                    child: Form(
+            : SingleChildScrollView(
+              child: Form(
                       key: form_key,
-                      child: Container(
+                      child:Container(
                         
                         // decoration: const BoxDecoration(
                         //     gradient: LinearGradient(colors: [
@@ -197,6 +195,7 @@ class _TaskPageState extends State<TaskPage> {
                                       child: TextFormField(
                                         // inputFormatters: [maskFormatter],
                               onTap: Timepick,
+                              enableInteractiveSelection: false,
                               textInputAction: TextInputAction.next,
                               controller: startTimeController,
                               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -226,6 +225,7 @@ class _TaskPageState extends State<TaskPage> {
                                     width:MediaQuery.of(context).size.width * 0.4,
                                     height: 70,
                                       child: TextFormField(
+                                        enableInteractiveSelection: false,
                                         // inputFormatters: [maskFormatter],
                                         textInputAction: TextInputAction.next,
                                         controller: endTimeController,
@@ -330,6 +330,7 @@ class _TaskPageState extends State<TaskPage> {
                                           });
                                       
                                           getAllCategory(value: dropdownvalue);
+                                          print(dropdownvalue);
                                         },
                                         value: dropdownvalue,
                                       ),
@@ -363,6 +364,7 @@ class _TaskPageState extends State<TaskPage> {
                                             onChanged: (newVal) {
                                             setState(() {
                                             dropdownvalue1 = newVal.toString();
+                                            print(dropdownvalue1);
                                             });
                                         },
                                         value: dropdownvalue1,
@@ -400,16 +402,12 @@ class _TaskPageState extends State<TaskPage> {
                                 SizedBox(height: 70,),
                               ElevatedButton(
                                 onPressed: (){
-                              
                                       
-                                  if ((startTimeController.text !=""||startTimeController.text != null) &&
-                                      (endTimeController.text != ""||endTimeController.text != null) &&
+                                  if ((startTimeController.text !=""||startTimeController.text.isNotEmpty) &&
+                                      (endTimeController.text != ""||endTimeController.text.isNotEmpty) &&
                                       (startTimeController.text.length < 9) &&
                                       (endTimeController.text.length < 9) &&
-                                      (dropdownvalue != "" ||
-                                          dropdownvalue != null) &&
-                                      (dropdownvalue1 != "" ||
-                                          dropdownvalue1 != null) &&
+                                      (dropdownvalue != null || dropdownvalue1 !=null) &&
                                       (descriptionController.text != "") &&
                                       (dateInputController.text != "")
                                       &&(startTimeController.text != endTimeController.text)) {
@@ -423,6 +421,7 @@ class _TaskPageState extends State<TaskPage> {
                                       
                                     //API function.... here...
                                     createtask(context);
+                                    print('api called');
                                   }
                                   else if(startTime.isEmpty|| endTime.isEmpty){
                                     showSnackBar(context, "Please enter time");
@@ -437,7 +436,7 @@ class _TaskPageState extends State<TaskPage> {
                                     showSnackBar(context, "Please select project");
                                   } 
                                   else if((dropdownvalue1 == null)){
-                                    showSnackBar(context, "Please select project");
+                                    showSnackBar(context, "Please select Task");
                                   } 
                     
                                    else if((description.isEmpty)){
@@ -480,9 +479,9 @@ List Allprojectlist = [];
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       Allprojectlist = jsonData;
-      setState(() {
+       setState(() {
         isLoading = false;
-      });
+       });
     }
   }
 
@@ -504,6 +503,7 @@ List Alltasklist = [];
       if (Alltasklist != null && Alltasklist.length > 0) {
         dropdownvalue1 = Alltasklist[0]["id"];
       }
+      
       setState(() {
         isLoading = false;
       });
@@ -550,7 +550,7 @@ List Alltasklist = [];
         //   MaterialPageRoute(
         //       builder: (context) => BottomNaviagate(screenindex: 0,)),
         // );
-        showSnackBar(context, 'Entered time not valid please check!');
+        showSnackBar(context, 'Entered Fields not valid please check!');
        
       }
       else {
