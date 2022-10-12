@@ -29,6 +29,11 @@ class _AddInfoState extends State<AddInfoPage> {
   var userRole;
   var mobilenum;
 
+  var upemail;
+  String? upApikey;
+  String? upRole;
+  String? upmobilenum;
+
   String? selectedValue;
 
   TextEditingController emailController = TextEditingController();
@@ -47,6 +52,24 @@ class _AddInfoState extends State<AddInfoPage> {
   void initState() {
     super.initState();
     getUserId();
+    print('role---$upRole');
+         print('num--$upmobilenum');
+         print('key---$upApikey');
+         setState(() {
+           update_value();
+         });
+
+    // selectedValue =upRole;
+    // mobilenumController.text =upmobilenum!;
+    // ApikeyController.text =upApikey!;
+  }
+
+  update_value(){
+    if(upRole !=null && upApikey !=null && upApikey !=0){
+    selectedValue =upRole;
+    mobilenumController.text =upmobilenum!;
+    ApikeyController.text =upApikey!;
+    }
   }
 
 // user id function here....get from sharedpreferense..
@@ -195,8 +218,9 @@ class _AddInfoState extends State<AddInfoPage> {
                       SizedBox(
                         child: ElevatedButton(
                           onPressed: () {
-                            print("End--$selectedValue");
-                            print("num1--${mobilenumController.text.length}");
+                            print("Role--$selectedValue");
+                            print("number--${mobilenumController.text.length}");
+                            print("APIKEY--${ApikeyController.text}");
                             print("userID--$userId");
                             if ((ApikeyController.text != '') &&
                                 (mobilenumController.text.length == 10) &&
@@ -238,6 +262,12 @@ class _AddInfoState extends State<AddInfoPage> {
     api.updateuser(userId!, updateData).then((response) {
       print(response);
       if (response.status == true) {
+         upmobilenum = response.data!.mobileNo;
+         upRole = response.data!.designation;
+         upApikey= response.data!.clockifyApiKey;
+         print(upRole);
+         print(upmobilenum);
+         print(upApikey);
         showSnackBar(context, "${response.message}");
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => BottomNaviagate(screenindex: 1),));
