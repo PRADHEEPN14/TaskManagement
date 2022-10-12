@@ -41,7 +41,7 @@ static const colorizeTextStyle = TextStyle(
     var message = '';
 
     if (timeNow <= 12) {
-      message = '${user.displayName}';
+      message = 'Good Morning${user.displayName}';
     } else if ((timeNow > 12) && (timeNow <= 16)) {
       message = 'Good Afernoon ${user.displayName}';
     } else if ((timeNow > 16) && (timeNow < 20)) {
@@ -88,11 +88,11 @@ static const colorizeTextStyle = TextStyle(
                                 child:AnimatedTextKit(
                                     animatedTexts: [
                                        
-                                    ColorizeAnimatedText(
-                                      'HI!!',
-                                      textStyle: colorizeTextStyle,
-                                      colors: colorizeColors,
-                                    ),
+                                    // ColorizeAnimatedText(
+                                    //   'HI!!',
+                                    //   textStyle: colorizeTextStyle,
+                                    //   colors: colorizeColors,
+                                    // ),
                                     ColorizeAnimatedText(
                                       '$message',
                                       textStyle: colorizeTextStyle,
