@@ -4,6 +4,7 @@
 
 import 'package:bloc_auth/presentation/Home/home_page.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
+import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher_icons/xml_templates.dart';
@@ -51,6 +52,7 @@ TextEditingController firstTime =   TextEditingController();
 
   TaskList(BuildContext newContext) {
     ctx = newContext;
+    print('....................${AllTask!.length}');
     return SafeArea(
       child: Scaffold(
               appBar: AppBar(
@@ -79,9 +81,11 @@ TextEditingController firstTime =   TextEditingController();
                   pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
             )
             ): Container(
-              child: AllTask!.length !=0 ? ListView.builder(
+              child: AllTask!.length !=0 ? 
+              ListView.builder(
                     itemCount: AllTask!.length,
                     itemBuilder: ((context, i) {
+                      print('lenth of data............${AllTask!.length}');
                       // Using CARD design...
                       return Padding(
                         padding: const EdgeInsets.only(left: 8,right: 8,top: 3),
@@ -249,7 +253,24 @@ TextEditingController firstTime =   TextEditingController();
                         ),
                       );
                     })):Center(
-                    child: Text('nodata found')
+                      child: AlertDialog(
+                          content: const Text("No Data List Found",
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18)),
+                                  actions: [
+                                  TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNaviagate(screenindex: 1),));
+                                  },
+                                  child: const Text("OK",style: TextStyle(fontSize: 15,color: Colors.red),
+                            )
+                          )
+                        ],
+                          
+                      ),
+                    // child: Text('No Data Found',style: TextStyle(fontSize: 20,color: Colors.red,fontFamily: 'TimesNewRoman'),)
                      )
             )
             // :Center(
@@ -296,7 +317,9 @@ TextEditingController firstTime =   TextEditingController();
         }
       } else {
         showSnackBar(context, "${response.message}");
-        // isLoading = false;
+        setState(() {
+        isLoading = false;
+        });
       }
     }).catchError((onError) {
       print(onError.toString());
