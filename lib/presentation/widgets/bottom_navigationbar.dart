@@ -2,6 +2,7 @@ import 'package:bloc_auth/presentation/Home/home_page.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
 import 'package:bloc_auth/presentation/TaskList/task_list.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNaviagate extends StatefulWidget {
   int? screenindex;
@@ -23,44 +24,71 @@ class _BottomNaviagateState extends State<BottomNaviagate> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      print(_selectedIndex);
     });
   }
 
   static const List<Widget> _pages = <Widget>[
     HomePage(),
-    TaskPage(),
+    TaskPage(screenindex: 1),
     TaskList(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: true,
-        selectedItemColor: Colors.white,
-        backgroundColor:Colors.deepPurple,
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        selectedLabelStyle: const TextStyle(color: Colors.red),
-        selectedFontSize: 15,
-        elevation: 10,
-
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_task),
-            label: 'Task',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_sharp),
-            label: 'TaskList',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        color: Colors.deepPurple,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+          child: GNav(
+            backgroundColor: Colors.deepPurple,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.orange.shade700,
+            gap: 15,
+            selectedIndex: _selectedIndex,
+            onTabChange: (index) {
+              _onItemTapped(index);
+              print(index);
+            },
+            padding: EdgeInsets.all(12),
+            tabs:[
+            GButton(icon: Icons.home,
+            text: "Home",),
+            GButton(icon: Icons.post_add_rounded,
+            text: "Task",),
+            GButton(icon: Icons.format_line_spacing_outlined,
+            text: "TaskList",)
+          ]),
+        ),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   showSelectedLabels: true,
+      //   selectedItemColor: Colors.white,
+      //   backgroundColor:Colors.deepPurple,
+      //   selectedIconTheme: const IconThemeData(color: Colors.white),
+      //   selectedLabelStyle: const TextStyle(color: Colors.red),
+      //   selectedFontSize: 15,
+      //   elevation: 10,
+
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_filled),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.add_task),
+      //       label: 'Task',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.list_sharp),
+      //       label: 'TaskList',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }
