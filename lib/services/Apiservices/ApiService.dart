@@ -2,7 +2,7 @@
 // import 'package:bloc_auth/services/model/update_profile_req.dart';
 // ignore_for_file: avoid_print, unused_import
 
-import 'package:bloc_auth/preference_helper.dart';
+// import 'package:bloc_auth/utils/preference_helper.dart';
 import 'package:bloc_auth/services/model/task_request.dart';
 import 'package:bloc_auth/services/model/task_response.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
@@ -14,6 +14,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../preference_helper.dart';
 import '../model/profile_request.dart';
 import '../model/profile_response.dart';
 import '../model/project_list.dart';
