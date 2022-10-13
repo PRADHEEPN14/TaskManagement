@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc_auth/presentation/SignIn/sign_in.dart';
 import 'package:flutter/material.dart';
@@ -15,18 +16,17 @@ class _SplashscreenState extends State<Splashscreen> {
   @override
   void initState() {
     super.initState();
-    if (mounted) {
       setState(() {
         Future.delayed(const Duration(seconds: 4), () {
-          Navigator.pushReplacement(
+          if(mounted){
+             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => const SignIn(),
               ));
+            }
         });
-        // dispose();
       });
-    }
   }
 
   @override
