@@ -3,13 +3,14 @@
 // ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, avoid_print
 
 
-import 'package:bloc_auth/preference_helper.dart';
+// import 'package:bloc_auth/utils/preference_helper.dart';
 import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
 // import 'package:bloc_auth/services/model/update_profile_req.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../preference_helper.dart';
 import '../../services/Apiservices/ApiService.dart';
 import 'package:provider/provider.dart';
 
@@ -55,9 +56,9 @@ class _AddInfoState extends State<AddInfoPage> {
     print('role---$upRole');
          print('num--$upmobilenum');
          print('key---$upApikey');
-         setState(() {
-           update_value();
-         });
+        //  setState(() {
+        //    update_value();
+        //  });
 
     // selectedValue =upRole;
     // mobilenumController.text =upmobilenum!;
