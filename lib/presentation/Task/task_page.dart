@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:bloc_auth/preference_helper.dart';
+// import 'package:bloc_auth/utils/preference_helper.dart';
 import 'package:bloc_auth/presentation/Information/addinfo.dart';
 import 'package:bloc_auth/presentation/widgets/drawer.dart';
 import 'package:bloc_auth/services/model/task_request.dart';
@@ -13,6 +13,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:intl/intl.dart';
 
+import '../../preference_helper.dart';
 import '../../services/Apiservices/ApiService.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ import 'package:http/http.dart' as http;
 import '../widgets/bottom_navigationbar.dart';
 
 class TaskPage extends StatefulWidget {
-  const TaskPage({Key? key}) : super(key: key);
+  const TaskPage({Key? key, required int screenindex}) : super(key: key);
 
   @override
   State<TaskPage> createState() => _TaskPageState();
@@ -58,13 +59,14 @@ class _TaskPageState extends State<TaskPage> {
       print('time--$parsedTime');
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
       print('time2--$formattedTime');
-
+      if(mounted){
       setState(() {
         startTimeController.text = pickedTime.format(context);
       });
     } else {
       print("Time is not selected");
     }
+  }
   }
 
 // <<<<<<<<<<<<<<<<< Second  time picker code here...>>>>>>>>>>>>>>>>>>
@@ -479,9 +481,12 @@ List Allprojectlist = [];
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       Allprojectlist = jsonData;
-       setState(() {
+       if(mounted){
+        setState(() {
         isLoading = false;
        });
+       }
+       
     }
   }
 
