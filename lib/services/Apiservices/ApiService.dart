@@ -26,7 +26,7 @@ part 'ApiService.g.dart';
 //flutter packages pub run build_runner watch --delete-conflicting-outputs
 
 // @RestApi(baseUrl: 'http://192.168.1.133/daytodaytask/')
-@RestApi(baseUrl: 'http://43.204.221.33:8080/daytodaytask/')
+@RestApi(baseUrl: 'http://demo.emeetify.com:8080/daytodaytask/')
 
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;

@@ -10,7 +10,7 @@ part of 'ApiService.dart';
 
 class _ApiService implements ApiService {
   _ApiService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://43.204.221.33:8080/daytodaytask/';
+    baseUrl ??= 'http://demo.emeetify.com:8080/daytodaytask/';
   }
 
   final Dio _dio;
