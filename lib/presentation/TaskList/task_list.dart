@@ -8,6 +8,8 @@ import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher_icons/xml_templates.dart';
+import 'package:get/get.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../services/Apiservices/ApiService.dart';
 import 'package:provider/provider.dart';
@@ -254,15 +256,19 @@ TextEditingController firstTime =   TextEditingController();
                       );
                     })):Center(
                       child: AlertDialog(
+                        elevation: 10,
+                        contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 1),
                           content: const Text("No Data List Found",
-                                style: TextStyle(
-                                  color: Colors.deepPurple,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18)),
+                            textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.deepPurple,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                          ),actionsPadding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                   actions: [
                                   TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNaviagate(screenindex: 1),));
+                                    Navigator.of(context).pushReplacement(PageTransition(child:BottomNaviagate(screenindex: 1),type: PageTransitionType.leftToRightWithFade,duration: Duration(seconds: 1),alignment: Alignment.topCenter,childCurrent: this.widget));
                                   },
                                   child: const Text("OK",style: TextStyle(fontSize: 15,color: Colors.red),
                             )
@@ -287,8 +293,8 @@ TextEditingController firstTime =   TextEditingController();
       tasklist, taskdecript) {
     print('cdcdcd$AllTask');
     print("kndvfv--$dailyTimeId");
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditTaskPage(
+    Navigator.of(context).push(PageTransition(
+        child: EditTaskPage(
               dailyTimeId: dailyTimeId,
               startTime: startTime,
               endTime: endtime,
@@ -296,7 +302,7 @@ TextEditingController firstTime =   TextEditingController();
               projectlist: projectlist,
               taskList: tasklist,
               taskdescript: taskdecript,
-            )));
+            ), type: PageTransitionType.scale,duration: Duration(seconds: 2),childCurrent: this.widget,alignment: Alignment.bottomRight));
   }
   
 //<<<<<<<<<<< End here..>>>>>>>>>>>>>>>

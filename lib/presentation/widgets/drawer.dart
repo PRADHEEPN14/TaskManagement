@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
 import '../Information/addinfo.dart';
@@ -45,7 +46,7 @@ class MyDrawer extends StatelessWidget {
                   fontSize: 18),
             ),
             onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AddInfoPage())),
+            PageTransition(child:AddInfoPage(),type: PageTransitionType.scale,duration: Duration(seconds: 1),alignment: Alignment.topCenter),)
           ),
           const Divider(height: 20),
           SizedBox(
@@ -54,7 +55,7 @@ class MyDrawer extends StatelessWidget {
                 if (state is UnAuthenticated) {
                   // Navigate to the sign in screen when the user Signs Out
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const SignIn()),
+                    PageTransition(child:SignIn(),type: PageTransitionType.theme,duration: Duration(seconds: 2),alignment: Alignment.topCenter),
                     (route) => false,
                   );
                 }

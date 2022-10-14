@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../preference_helper.dart';
 import '../../services/Apiservices/ApiService.dart';
@@ -544,26 +545,19 @@ List Alltasklist = [];
     api.createtask(TaskData).then((response) {
       if (response.status == true) {
         print(response.status);
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => BottomNaviagate(screenindex: 2)),
-        );
+         Navigator.of(context).pushReplacement(
+        PageTransition(child:BottomNaviagate(screenindex: 2),type: PageTransitionType.rightToLeftJoined,duration: Duration(seconds: 1),alignment: Alignment.topCenter,childCurrent: this.widget),);
         print(response.message);
         showSnackBar(context, '${response.message}');
       } else if(response.message== "Internal server error. Please try again later !"){
-        //  Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //       builder: (context) => BottomNaviagate(screenindex: 0,)),
-        // );
         showSnackBar(context, 'Entered Fields not valid please check!');
        
       }
       else {
         showSnackBar(context, '${response.message}');
-         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) =>const AddInfoPage()),
-        );
+         Navigator.of(context).push(
+        PageTransition(child:AddInfoPage(),type: PageTransitionType.fade,duration: Duration(seconds: 1),alignment: Alignment.topCenter,childCurrent: this.widget),);
+        
 
       }
     });

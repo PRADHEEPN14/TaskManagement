@@ -7,6 +7,7 @@ import 'package:bloc_auth/presentation/TaskList/task_list.dart';
 import 'package:bloc_auth/services/model/task_request.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../services/Apiservices/ApiService.dart';
 import '../../services/model/profile_response.dart';
@@ -334,31 +335,28 @@ class _EditTaskPageState extends State<EditTaskPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      print('clicked');
                       // is the condition for before Api call..
-                      if ((startTime != "") &&
-                          (endTime != "") &&
-                          (startTime.length < 8) &&
-                          (endTime.length < 8) &&
-                          (Projectvalue != "" || Projectvalue != null) &&
-                          (Listvalue != "" || Listvalue != null) &&
-                          (descriptionController.text != "") &&
-                          (dateInputController.text != "")
-                           &&(startTime != endTime)) {
-                        //if print some value what we entered in your text field...
-                        print("start--$startTime");
-                        print("end--$endTime");
-                        print("des${descriptionController.text}");
-                        print("date${dateInputController.text}");
-                        print("project--$Projectvalue");
-                        print("list--$Listvalue");
-                        print("valid form");
-
-                        // Update Api function...
-                        updatetask(context);
-
-                      }else if((startTime == endTime)){
-                                  showSnackBar(context, "Please enter valid time");
-                                }
+                      if ((startTimeController.text !=""||startTimeController.text.isNotEmpty) &&
+                                      (endTimeController.text != ""||endTimeController.text.isNotEmpty) &&
+                                      (startTimeController.text.length < 9) &&
+                                      (endTimeController.text.length < 9) &&
+                                      (Listvalue != null || Projectvalue !=null) &&
+                                      (descriptionController.text != "") &&
+                                      (dateInputController.text != "")
+                                      &&(startTimeController.text != endTimeController.text)) {
+                                    print("valid form");
+                                     print("start--${startTimeController.text}");
+                                  print("end--${endTimeController.text}");
+                                  print("des${descriptionController.text}");
+                                  print("date${dateInputController.text}");
+                                  print("list--$Listvalue");
+                                  print("project--$Projectvalue");
+                                      
+                                    //API function.... here...
+                                    updatetask(context);
+                                    print('api called');
+                                  }
                                   else if(startTime.isEmpty|| endTime.isEmpty){
                                     showSnackBar(context, "Please enter time");
                                   }
@@ -372,15 +370,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                     showSnackBar(context, "Please select project");
                                   } 
                                   else if((Listvalue == null)){
-                                    showSnackBar(context, "Please select project");
+                                    showSnackBar(context, "Please select Task");
                                   } 
                     
                                    else if((description.isEmpty)){
                                     showSnackBar(context, "Please enter description");
                                   } 
-                       else {
-                        // showSnackBar(context, "Please enter all fields.");
-                      }
+                                  
+                    
+                                   else {
+                                  
+                                    showSnackBar(context, "Please enter all fields.");
+                                  }
                     },
                     child: const Text("Update Task"),
                   )
@@ -498,6 +499,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
 //  <<<<<< UPDATE API Function here...>>>>>>>   //
 
   void updatetask(context) {
+    print('update');
     Task_Req updateTask = Task_Req();
     updateTask.startTime = startTimeController.text;
     updateTask.endTime = endTimeController.text;
@@ -510,8 +512,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
     api.updatetask(widget.dailyTimeId!, updateTask).then((response) {
       if (response.status == true) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => BottomNaviagate(screenindex: 2)),
+          PageTransition(type: PageTransitionType.fade,
+              child:BottomNaviagate(screenindex: 2)),
         );
 
         showSnackBar(context, "${response.message}");
