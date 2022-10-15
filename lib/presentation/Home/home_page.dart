@@ -81,18 +81,10 @@ static const colorizeTextStyle = TextStyle(
                     width: 350.0,
                     height: 95,
                     decoration: BoxDecoration(
-                      
-                                borderRadius: BorderRadius.circular(20)),
-                                child: Center(
-                                  
+                       borderRadius: BorderRadius.circular(20)),
+                          child: Center(  
                                 child:AnimatedTextKit(
                                     animatedTexts: [
-                                       
-                                    // ColorizeAnimatedText(
-                                    //   'HI!!',
-                                    //   textStyle: colorizeTextStyle,
-                                    //   colors: colorizeColors,
-                                    // ),
                                     ColorizeAnimatedText(
                                       '$message',
                                       textStyle: colorizeTextStyle,
@@ -111,8 +103,7 @@ static const colorizeTextStyle = TextStyle(
                                   ],
                                   isRepeatingAnimation: true,
                              )
-                                                            
-                    ),
+                             ),
                   ),
                 ),
               ),
