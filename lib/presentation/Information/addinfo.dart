@@ -36,6 +36,7 @@ class _AddInfoState extends State<AddInfoPage> {
   String? upmobilenum;
 
   String? selectedValue;
+  var ctx;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController userRoleController = TextEditingController();
@@ -52,25 +53,9 @@ class _AddInfoState extends State<AddInfoPage> {
   @override
   void initState() {
     super.initState();
+    print('hello');
+    WidgetsBinding.instance.addPostFrameCallback((_) => updatedetail1());
     getUserId();
-    print('role---$upRole');
-         print('num--$upmobilenum');
-         print('key---$upApikey');
-        //  setState(() {
-        //    update_value();
-        //  });
-
-    // selectedValue =upRole;
-    // mobilenumController.text =upmobilenum!;
-    // ApikeyController.text =upApikey!;
-  }
-
-  update_value(){
-    if(upRole !=null && upApikey !=null && upApikey !=0){
-    selectedValue =upRole;
-    mobilenumController.text =upmobilenum!;
-    ApikeyController.text =upApikey!;
-    }
   }
 
 // user id function here....get from sharedpreferense..
@@ -90,13 +75,14 @@ class _AddInfoState extends State<AddInfoPage> {
         create: (context) => ApiService.create(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Builder(builder: (BuildContext context) {
+          body: Builder(builder: (context) {
             return AddInfoPage(context);
           }),
         ));
   }
 
-  AddInfoPage(BuildContext context) {
+  AddInfoPage(BuildContext context1) {
+    ctx =context1;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -113,9 +99,6 @@ class _AddInfoState extends State<AddInfoPage> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              // decoration: const BoxDecoration(
-              //           gradient: LinearGradient(colors: [Color(0xFFF8F8F6),Color(0xFFDF60F6)],
-              //           begin: Alignment.topRight, end: Alignment.bottomCenter)),
                 child: SingleChildScrollView(
                 child: Padding(padding: const EdgeInsets.all(28.0),
                   child: Column(
@@ -153,7 +136,7 @@ class _AddInfoState extends State<AddInfoPage> {
                           maxLength: 10,
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                           controller: mobilenumController,
-                          validator: (value) =>mobilenumController.text.length < 10? "enter valid num": null,
+                          validator: (value) =>mobilenumController.text.length < 10? "enter valid number": null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: const InputDecoration(
                             labelText: 'Mobile',
@@ -182,8 +165,6 @@ class _AddInfoState extends State<AddInfoPage> {
                                   content: Text("Go to ->  Clockify website --> Profile settings -->  Generate API then Copy paste that field",
                                   style: TextStyle(wordSpacing: 2,color: Colors.grey,fontSize: 14)),
                                   );
-                                    
-                        
                           });
                           },
                            icon: const Icon(Icons.question_mark_sharp,color: Colors.grey,),
@@ -219,6 +200,7 @@ class _AddInfoState extends State<AddInfoPage> {
                       SizedBox(
                         child: ElevatedButton(
                           onPressed: () {
+                            updatedetail1();
                             print("Role--$selectedValue");
                             print("number--${mobilenumController.text.length}");
                             print("APIKEY--${ApikeyController.text}");
@@ -261,11 +243,10 @@ class _AddInfoState extends State<AddInfoPage> {
     updateData.clockifyApiKey = ApikeyController.text;
     var api = Provider.of<ApiService>(context, listen: false);
     api.updateuser(userId!, updateData).then((response) {
-      print(response);
       if (response.status == true) {
-         upmobilenum = response.data!.mobileNo;
-         upRole = response.data!.designation;
-         upApikey= response.data!.clockifyApiKey;
+         upmobilenum = response.data!.mobileNo!;
+         upRole = response.data!.designation!;
+         upApikey= response.data!.clockifyApiKey!;
          print(upRole);
          print(upmobilenum);
          print(upApikey);
@@ -275,6 +256,27 @@ class _AddInfoState extends State<AddInfoPage> {
         // mobile= response.data.
       }
       //  print(object)
+    });
+  }
+
+  void updatedetail1(){
+    print('worked');
+    var api= Provider.of<ApiService>(ctx!, listen: false);
+    api.updatedetail(userId!).then((response){
+      print('Api called');
+      print(upRole);
+      print(upmobilenum);
+      print(upApikey);
+      if(response.status == true){
+      upRole  = response.data!.designation!;
+      upmobilenum = response.data!.mobileNo!;
+      upApikey = response.data!.clockifyApiKey!;
+      print(upRole);
+      print(upmobilenum);
+      print(upApikey);
+      }
+      
+
     });
   }
   
