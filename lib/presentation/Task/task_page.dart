@@ -172,297 +172,306 @@ class _TaskPageState extends State<TaskPage> {
               ))
               // <<<<<<<<<<<<<<<<< End here...>>>>>>>>>>>>>>>>>>
             : SingleChildScrollView(
-              child: Form(
-                      key: form_key,
-                      child:Container(
-                        
-                        // decoration: const BoxDecoration(
-                        //     gradient: LinearGradient(colors: [
-                        //   Color(0xFFF8F8F6),
-                        //   Color(0xFFDD53F6),
-                        // ], begin: Alignment.topRight, end: Alignment.bottomCenter)),
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Container(
-                                      width:MediaQuery.of(context).size.width * 0.4,
-                                      height: 70,
-                                      child: TextFormField(
-                                        // inputFormatters: [maskFormatter],
-                              onTap: Timepick,
-                              enableInteractiveSelection: false,
-                              textInputAction: TextInputAction.next,
-                              controller: startTimeController,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              maxLength: 8,
-                              maxLines: 1,
-                              decoration: const InputDecoration(
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)),
-                                hintText: "10:00",
-                                label: Text("Start time"),
-                                labelStyle: TextStyle(color: Color.fromARGB(255, 29, 6, 111),fontWeight: FontWeight.w500,fontSize: 20),
-                                ),
-                          
-                              validator: (value) {
-                                startTime = value!;
-                                if (value.isEmpty) {
-                                  return "enter time";
-                                } else if (value.length < 5) {
-                                  return "Invalid time";
-                                }
-                              },
-                            ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width:MediaQuery.of(context).size.width * 0.4,
-                                    height: 70,
-                                      child: TextFormField(
-                                        enableInteractiveSelection: false,
-                                        // inputFormatters: [maskFormatter],
-                                        textInputAction: TextInputAction.next,
-                                        controller: endTimeController,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        validator: (value) {
-                                        endTime = value!;
-                                        if (value.isEmpty) {
-                                          return "enter time";
-                                        } else if (value.length < 5) {
-                                          return "Invalid time";
-                                        }
-                                      },
-                                      maxLength: 8,
-                                      maxLines: 1,
-                                      onTap: Timepicker,
-                                      decoration: const InputDecoration(
-                                          border: OutlineInputBorder(
-                                          borderSide:BorderSide(color: Colors.blue)),
-                                          hintText: "18:00",
-                                          labelText: "End time",
-                                          labelStyle: TextStyle(
-                                              color:Color.fromARGB(255, 29, 6, 111),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 18,),
-                              Padding(padding: const EdgeInsets.all(8.0),
-                                child: Column(children: [
-                                  SizedBox(
-                                    height: 70,
-                                    child: TextFormField(
-                                      textInputAction: TextInputAction.next,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      validator: (value) =>dateInputController.text.isEmpty||dateInputController.text==null?'enter valid date':null,
-                                      controller: dateInputController,
-                                      //editing controller of this TextField
-                                        decoration: const InputDecoration(
-                                        border: OutlineInputBorder(borderSide:BorderSide(color: Colors.grey)),
-                                        prefixIcon: Icon(Icons.calendar_today),
-                                        labelText: "Enter Date",
-                                        labelStyle: TextStyle(color:Color.fromARGB(255, 29, 6, 111),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 20),
-                                        
-                                      ),
-                                      readOnly: true,
-                                      //set it true, so that user will not able to edit text
-                                      onTap: () async {
-                                        DateTime? pickedDate = await showDatePicker(context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1950),
-                                            //DateTime.now() - not to allow to choose before today.
-                                            lastDate: DateTime(2100));
-                                      
-                                        if (pickedDate != null) {
-                                          print(pickedDate); //pickedDate output format => 2021-03-10
-                                          String formattedDate =DateFormat('dd-MM-yyyy').format(pickedDate);
-                                          print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                                          setState(() {
-                                            dateInputController.text =formattedDate; //set output date to TextField value.
-                                          });
-                                        } else {}
-                                      },
-                                    ),
-                                  ),
-                                  
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    height: 78,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField(
-                                        decoration: const InputDecoration(
-                                          labelText: 'Project',
-                                          labelStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 29, 6, 111),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20),
-                                          border: OutlineInputBorder(),
-                                          disabledBorder: UnderlineInputBorder(),
-                                        ),
-                                        isExpanded: true,
-                                        validator: (value) =>value == null? "select project": null,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        hint:const Text('Project'),
-                                        borderRadius: BorderRadius.circular(15),
-                                        items: Allprojectlist.map((item) {
-                                          return DropdownMenuItem(
-                                            value: item["id"].toString(),
-                                            child: Text(item['name'].toString()),
-                                          );
-                                        }).toList(),
-                                        onChanged: (newVal) {
-                                      
-                                          setState(() {
-                                            dropdownvalue = newVal.toString();
-                                          });
-                                      
-                                          getAllCategory(value: dropdownvalue);
-                                          print(dropdownvalue);
-                                        },
-                                        value: dropdownvalue,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 28,
-                                  ),
-                                  SizedBox(
-                                    height: 78,
-                                      child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField(
-                                          decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Task List',
-                                          labelStyle: TextStyle(color:Color.fromARGB(255, 29, 6, 111),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20),
-                                        ),
-                                        isExpanded: true,
-                                        validator: (value) =>value == null? "Select Task": null,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        hint:const Text('Select your Task'),
-                                        borderRadius: BorderRadius.circular(15),
-                                        items: Alltasklist.map((item) {
-                                          return DropdownMenuItem(
-                                            value: item["id"].toString(),
-                                            child: Text(item['name'].toString()),
-                                            );
-                                            }).toList(),
-                                            onChanged: (newVal) {
-                                            setState(() {
-                                            dropdownvalue1 = newVal.toString();
-                                            print(dropdownvalue1);
-                                            });
-                                        },
-                                        value: dropdownvalue1,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 18,),
-                                  SizedBox(
-                                    height: 90,
-                                      child: TextFormField(
-                                        maxLines: 5,
-                                      controller: descriptionController,
-                                      textInputAction: TextInputAction.next,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      validator: (value) {
-                                        description = value!;
-                                        if (value.isEmpty) {
-                                          return "please enter feild";
-                                        }
-                                      },
-                                      decoration: const InputDecoration(
-                                              border: OutlineInputBorder(
-                                              borderSide:BorderSide(color: Colors.grey)),
-                                              hintText: "Task description",
-                                              labelText: "Description",
-                                              labelStyle: TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 29, 6, 111),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20)),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                                SizedBox(height: 70,),
-                              ElevatedButton(
-                                onPressed: (){
-                                      
-                                  if ((startTimeController.text !=""||startTimeController.text.isNotEmpty) &&
-                                      (endTimeController.text != ""||endTimeController.text.isNotEmpty) &&
-                                      (startTimeController.text.length < 9) &&
-                                      (endTimeController.text.length < 9) &&
-                                      (dropdownvalue != null || dropdownvalue1 !=null) &&
-                                      (descriptionController.text != "") &&
-                                      (dateInputController.text != "")
-                                      &&(startTimeController.text != endTimeController.text)) {
-                                    print("valid form");
-                                     print("start--${startTimeController.text}");
-                                  print("end--${endTimeController.text}");
-                                  print("des${descriptionController.text}");
-                                  print("date${dateInputController.text}");
-                                  print("list--$dropdownvalue");
-                                  print("project--$dropdownvalue1");
-                                      
-                                    //API function.... here...
-                                    createtask(context);
-                                    print('api called');
-                                  }
-                                  else if(startTime.isEmpty|| endTime.isEmpty){
-                                    showSnackBar(context, "Please enter time");
-                                  }
-                                  else if((startTime == endTime)){
-                                    showSnackBar(context, "Please enter valid time");
-                                  } 
-                                  else if((dateInputController.text.isEmpty)){
-                                    showSnackBar(context, "Please select Date");
-                                  } 
-                                  else if((dropdownvalue == null)){
-                                    showSnackBar(context, "Please select project");
-                                  } 
-                                  else if((dropdownvalue1 == null)){
-                                    showSnackBar(context, "Please select Task");
-                                  } 
-                    
-                                   else if((description.isEmpty)){
-                                    showSnackBar(context, "Please enter description");
-                                  } 
-                                  
-                    
-                                   else {
-                                  
-                                    showSnackBar(context, "Please enter all fields.");
-                                  }
-                                },
-                                child: const Text("Add Task"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+              child:FormsFields(context),
                   ),
                 ),
                 drawer: MyDrawer(),
               ));
+  }
+
+  void updatedetail(){
+    print('beforeapi-----------$userId');
+    var api= Provider.of<ApiService>(context, listen: false);
+    api.updatedetail(userId!).then((response){
+      print('afterapi---------------$userId');
+      print(response);
+       var upRole = response.data;
+    });
+  }
+// Task Formfields Design And CODE HERE.........
+  Form FormsFields(BuildContext context) {
+    return Form(
+                    key: form_key,
+                    child:Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                    width:MediaQuery.of(context).size.width * 0.4,
+                                    height: 70,
+                                    child: TextFormField(
+                                      // inputFormatters: [maskFormatter],
+                            onTap: Timepick,
+                            enableInteractiveSelection: false,
+                            textInputAction: TextInputAction.next,
+                            controller: startTimeController,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            maxLength: 8,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)),
+                              hintText: "10:00",
+                              label: Text("Start time"),
+                              labelStyle: TextStyle(color: Color.fromARGB(255, 29, 6, 111),fontWeight: FontWeight.w500,fontSize: 20),
+                              ),
+                        
+                            validator: (value) {
+                              startTime = value!;
+                              if (value.isEmpty) {
+                                return "enter time";
+                              } else if (value.length < 5) {
+                                return "Invalid time";
+                              }
+                            },
+                          ),
+                                  ),
+                                ),
+                                Container(
+                                  width:MediaQuery.of(context).size.width * 0.4,
+                                  height: 70,
+                                    child: TextFormField(
+                                      enableInteractiveSelection: false,
+                                      // inputFormatters: [maskFormatter],
+                                      textInputAction: TextInputAction.next,
+                                      controller: endTimeController,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      validator: (value) {
+                                      endTime = value!;
+                                      if (value.isEmpty) {
+                                        return "enter time";
+                                      } else if (value.length < 5) {
+                                        return "Invalid time";
+                                      }
+                                    },
+                                    maxLength: 8,
+                                    maxLines: 1,
+                                    onTap: Timepicker,
+                                    decoration: const InputDecoration(
+                                        border: OutlineInputBorder(
+                                        borderSide:BorderSide(color: Colors.blue)),
+                                        hintText: "18:00",
+                                        labelText: "End time",
+                                        labelStyle: TextStyle(
+                                            color:Color.fromARGB(255, 29, 6, 111),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 18,),
+                            Padding(padding: const EdgeInsets.all(8.0),
+                              child: Column(children: [
+                                SizedBox(
+                                  height: 70,
+                                  child: TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    validator: (value) =>dateInputController.text.isEmpty||dateInputController.text==null?'enter valid date':null,
+                                    controller: dateInputController,
+                                    //editing controller of this TextField
+                                      decoration: const InputDecoration(
+                                      border: OutlineInputBorder(borderSide:BorderSide(color: Colors.grey)),
+                                      prefixIcon: Icon(Icons.calendar_today),
+                                      labelText: "Enter Date",
+                                      labelStyle: TextStyle(color:Color.fromARGB(255, 29, 6, 111),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20),
+                                      
+                                    ),
+                                    readOnly: true,
+                                    //set it true, so that user will not able to edit text
+                                    onTap: () async {
+                                      DateTime? pickedDate = await showDatePicker(context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1950),
+                                          //DateTime.now() - not to allow to choose before today.
+                                          lastDate: DateTime(2100));
+                                    
+                                      if (pickedDate != null) {
+                                        print(pickedDate); //pickedDate output format => 2021-03-10
+                                        String formattedDate =DateFormat('dd-MM-yyyy').format(pickedDate);
+                                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                                        setState(() {
+                                          dateInputController.text =formattedDate; //set output date to TextField value.
+                                        });
+                                      } else {}
+                                    },
+                                  ),
+                                ),
+                                
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height: 78,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Project',
+                                        labelStyle: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 29, 6, 111),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
+                                        border: OutlineInputBorder(),
+                                        disabledBorder: UnderlineInputBorder(),
+                                      ),
+                                      isExpanded: true,
+                                      validator: (value) =>value == null? "select project": null,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      hint:const Text('Project'),
+                                      borderRadius: BorderRadius.circular(15),
+                                      items: Allprojectlist.map((item) {
+                                        return DropdownMenuItem(
+                                          value: item["id"].toString(),
+                                          child: Text(item['name'].toString()),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newVal) {
+                                    
+                                        setState(() {
+                                          dropdownvalue = newVal.toString();
+                                        });
+                                    
+                                        getAllCategory(value: dropdownvalue);
+                                        print(dropdownvalue);
+                                      },
+                                      value: dropdownvalue,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 28,
+                                ),
+                                SizedBox(
+                                  height: 78,
+                                    child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField(
+                                        decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Task List',
+                                        labelStyle: TextStyle(color:Color.fromARGB(255, 29, 6, 111),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
+                                      ),
+                                      isExpanded: true,
+                                      validator: (value) =>value == null? "Select Task": null,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      hint:const Text('Select your Task'),
+                                      borderRadius: BorderRadius.circular(15),
+                                      items: Alltasklist.map((item) {
+                                        return DropdownMenuItem(
+                                          value: item["id"].toString(),
+                                          child: Text(item['name'].toString()),
+                                          );
+                                          }).toList(),
+                                          onChanged: (newVal) {
+                                          setState(() {
+                                          dropdownvalue1 = newVal.toString();
+                                          print(dropdownvalue1);
+                                          });
+                                      },
+                                      value: dropdownvalue1,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 18,),
+                                SizedBox(
+                                  height: 90,
+                                    child: TextFormField(
+                                      maxLines: 5,
+                                    controller: descriptionController,
+                                    textInputAction: TextInputAction.next,
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    validator: (value) {
+                                      description = value!;
+                                      if (value.isEmpty) {
+                                        return "please enter feild";
+                                      }
+                                    },
+                                    decoration: const InputDecoration(
+                                            border: OutlineInputBorder(
+                                            borderSide:BorderSide(color: Colors.grey)),
+                                            hintText: "Task description",
+                                            labelText: "Description",
+                                            labelStyle: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 29, 6, 111),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20)),
+                                  ),
+                                ),
+                              ]),
+                            ),
+                              SizedBox(height: 70,),
+                            ElevatedButton(
+                              onPressed: (){
+                                // updatedetail();
+                                    // condition check fiels without empty>>>
+                                if ((startTimeController.text !=""||startTimeController.text.isNotEmpty) &&
+                                    (endTimeController.text != ""||endTimeController.text.isNotEmpty) &&
+                                    (startTimeController.text.length < 9) &&
+                                    (endTimeController.text.length < 9) &&
+                                    (dropdownvalue != null || dropdownvalue1 !=null) &&
+                                    (descriptionController.text != "") &&
+                                    (dateInputController.text != "")
+                                    &&(startTimeController.text != endTimeController.text)) {
+                                  print("valid form");
+                                   print("start--${startTimeController.text}");
+                                print("end--${endTimeController.text}");
+                                print("des${descriptionController.text}");
+                                print("date${dateInputController.text}");
+                                print("list--$dropdownvalue");
+                                print("project--$dropdownvalue1");
+                                    
+                                  //API function.... here...
+                                  createtask(context);
+                                  print('api called');
+                                }
+                                else if(startTime.isEmpty|| endTime.isEmpty){
+                                  showSnackBar(context, "Please enter time");
+                                }
+                                else if((startTime == endTime)){
+                                  showSnackBar(context, "Please enter valid time");
+                                } 
+                                else if((dateInputController.text.isEmpty)){
+                                  showSnackBar(context, "Please select Date");
+                                } 
+                                else if((dropdownvalue == null)){
+                                  showSnackBar(context, "Please select project");
+                                } 
+                                else if((dropdownvalue1 == null)){
+                                  showSnackBar(context, "Please select Task");
+                                } 
+                  
+                                 else if((description.isEmpty)){
+                                  showSnackBar(context, "Please enter description");
+                                } 
+                                
+                  
+                                 else {
+                                
+                                  showSnackBar(context, "Please enter all fields.");
+                                }
+                              },
+                              child: const Text("Add Task"),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
   }
 
 
@@ -546,7 +555,7 @@ List Alltasklist = [];
       if (response.status == true) {
         print(response.status);
          Navigator.of(context).pushReplacement(
-        PageTransition(child:BottomNaviagate(screenindex: 2),type: PageTransitionType.rightToLeftJoined,duration: Duration(seconds: 1),alignment: Alignment.topCenter,childCurrent: this.widget),);
+        PageTransition(child:BottomNaviagate(screenindex: 2),type: PageTransitionType.rightToLeftWithFade,duration: Duration(seconds: 2),alignment: Alignment.topCenter,childCurrent: this.widget),);
         print(response.message);
         showSnackBar(context, '${response.message}');
       } else if(response.message== "Internal server error. Please try again later !"){
