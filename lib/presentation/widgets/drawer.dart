@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
@@ -9,6 +10,7 @@ import '../SignIn/sign_in.dart';
 
 class MyDrawer extends StatelessWidget {
   MyDrawer({Key? key}) : super(key: key);
+
   final user = FirebaseAuth.instance.currentUser!;
 
   @override

@@ -33,6 +33,8 @@ class _BottomNaviagateState extends State<BottomNaviagate> {
     TaskPage(screenindex: 1),
     TaskList(),
   ];
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,32 +65,6 @@ class _BottomNaviagateState extends State<BottomNaviagate> {
           ]),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   showSelectedLabels: true,
-      //   selectedItemColor: Colors.white,
-      //   backgroundColor:Colors.deepPurple,
-      //   selectedIconTheme: const IconThemeData(color: Colors.white),
-      //   selectedLabelStyle: const TextStyle(color: Colors.red),
-      //   selectedFontSize: 15,
-      //   elevation: 10,
-
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home_filled),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.add_task),
-      //       label: 'Task',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.list_sharp),
-      //       label: 'TaskList',
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      // ),
     );
   }
 }

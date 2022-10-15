@@ -55,12 +55,7 @@ class _SplashscreenState extends State<Splashscreen> {
                 child: LoadingIndicator(//loading design ...
                     indicatorType: Indicator.ballSpinFadeLoader,
                     colors: [
-                      Colors.white,
-                      // Colors.yellow,
-                      // Colors.black,
-                      // Colors.blue,
-                      // Colors.deepPurple,
-                      
+                      Colors.white, 
                     ],
                     strokeWidth: 10,
                     pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),

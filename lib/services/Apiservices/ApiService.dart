@@ -15,6 +15,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preference_helper.dart';
+import '../model/getupdate_detail_res.dart';
 import '../model/profile_request.dart';
 import '../model/profile_response.dart';
 import '../model/project_list.dart';
@@ -55,6 +56,9 @@ abstract class ApiService {
 
   @DELETE("timeEntry/deleteTimeentries?daily_entry_id={dailyTimeId}")
   Future<Task_Res> deletetask(@Path("dailyTimeId") int dailyTimeId);
+
+  @GET("app/getUserUpdate/{userId}")
+  Future<Userupdate_Res> updatedetail(@Path("userId") int userId);
 
 
 ////////////////////////////////////////////////////////
