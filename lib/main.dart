@@ -21,18 +21,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => AuthRepository(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
-              if (snapshot.hasData) {
-                return const Dashboard();
-              }
-              // Otherwise, they're not signed in. Show the sign in page.
-              return const Splashscreen();
-            }),
+      child: BlocProvider(
+        create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context)),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
+                if (snapshot.hasData) {
+                  return const Dashboard();
+                }
+                // Otherwise, they're not signed in. Show the sign in page.
+                return const Splashscreen();
+              }),
+        ),
       ),
     );
   }
