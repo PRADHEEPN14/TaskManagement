@@ -1,18 +1,47 @@
+import 'package:bloc_auth/presentation/Home/home_page.dart';
+import 'package:bloc_auth/presentation/SearchPage/searchpage.dart';
+// import 'package:bloc_auth/presentation/Timesheet/timetackerpage.dart';
+import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
+import '../../preference_helper.dart';
 import '../Information/addinfo.dart';
 import '../SignIn/sign_in.dart';
+import '../Timesheet/timetrackerpage.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   MyDrawer({Key? key}) : super(key: key);
 
-  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
 
+class _MyDrawerState extends State<MyDrawer> {
+ var ismanager = true;
+
+final user = FirebaseAuth.instance.currentUser!;
+int? user_roleId ;
+
+// <<<<<<<<< GetuserId from LoginPage function here...>>>>>>>>
+  getUserRoleId() async {
+    user_roleId = await PreferenceHelper.getUserRoleId();
+
+    print("user_roleIdD--$user_roleId");
+  }
+// <<<<<<<<< End here...>>>>>>>>>>
+  void initState() {
+    // TODO: implement initState
+    // WidgetsBinding.instance.addPostFrameCallback((_) => ());
+    super.initState();
+    getUserRoleId();
+    // print('checking$user_roleId');
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -51,6 +80,23 @@ class MyDrawer extends StatelessWidget {
             PageTransition(child:AddInfoPage(),type: PageTransitionType.scale,duration: Duration(seconds: 1),alignment: Alignment.topCenter),)
           ),
           const Divider(height: 20),
+          ListTile(
+                leading: const Icon(Icons.supervised_user_circle,
+                size: 30,
+                color: Color(0xFFF73B02),
+            ),
+            title: const Text("TimeSheet",
+                  style: TextStyle(
+                  color: Color(0xFF3B3B3C),
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
+            onTap: () => user_roleId! < 3 ? Navigator.of(context).push(
+            PageTransition(child:Timetracker(),type: PageTransitionType.scale,duration: Duration(seconds: 1),alignment: Alignment.topCenter),):Navigator.of(context).push(
+            PageTransition(child:Searchpage(),type: PageTransitionType.scale,duration: Duration(seconds: 1),alignment: Alignment.topCenter),)
+          ),
+          const Divider(height: 20),
           SizedBox(
             child: BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
@@ -80,9 +126,10 @@ class MyDrawer extends StatelessWidget {
                                     fontSize: 18)),
                                     actions: [
                                     TextButton(
-                                    onPressed: () {
+                                    onPressed: () async{
                                       // Signing out the user
                                       context.read<AuthBloc>().add(SignOutRequested());
+                                      PreferenceHelper.clearStorage();
                                     },
                                     child: const Text("Yes",style: TextStyle(fontSize: 15),
                                     )
