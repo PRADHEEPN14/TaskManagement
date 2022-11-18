@@ -52,8 +52,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
   dynamic Projectvalue;
   dynamic Listvalue;
 
- 
-
+  TextEditingController endTimeController1 = TextEditingController();
+  TextEditingController startTimeController1 = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
   TextEditingController ProjectController = TextEditingController();
@@ -77,6 +77,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     getAllproject();
     print('xxxxx---${widget.projectlist}');
     print('xxxxx---${widget.taskList}');
+    print({widget.taskList});
 
     // Pass the data from TaskPage to assign current textform fields...
     setState(() {
@@ -106,6 +107,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     return SafeArea(
         child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
         title: const Center(child: Text('Edit Task')),
         backgroundColor: Colors.deepPurple,
         shape: const RoundedRectangleBorder(
@@ -140,6 +142,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: 70,
                         child: TextFormField(
+                          readOnly: true,
                           enableInteractiveSelection: false,
                           inputFormatters: [maskFormatter],
                           onTap: Timepick,
@@ -149,7 +152,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           maxLength: 8,
                           maxLines: 1,
                           decoration: const InputDecoration(
-                          filled: true,
+                          // filled: true,
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue)),
                             hintText: "10:00",
@@ -172,6 +175,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: 70,
                       child: TextFormField(
+                        readOnly: true,
                         enableInteractiveSelection: false,
                         inputFormatters: [maskFormatter],
                         onTap: Timepicker,
@@ -230,7 +234,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1950),
                               //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2100));
+                              lastDate: DateTime.now());
     
                           if (pickedDate != null) {
                             print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
@@ -292,7 +296,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                             isExpanded: true,
                             validator: (Listvalue) =>
                             Listvalue == null ? "select Task" : null,
-                            autovalidateMode: AutovalidateMode.always,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             hint: Text('Select your Task'),
                             borderRadius: BorderRadius.circular(15),
                             items: Alltasklist.map((item) {
@@ -304,6 +308,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           style:const TextStyle(fontSize: 18,color: Colors.black),
                           //once the dropdown value change the new value was stored and assign to Listtvalue..
                           onChanged: (newVal) {
+                            // newVal =widget.taskList;
                           //set the Listvalue as a string
                             setState(() {
                               Listvalue = newVal.toString();
@@ -362,29 +367,29 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                   print('api called');
                                 }
                                 else if(startTime.isEmpty|| endTime.isEmpty){
-                                  showSnackBar(context, "Please enter time");
+                                  errshowSnackBar(context, "Please enter time");
                                 }
                                 else if((startTime == endTime)){
-                                  showSnackBar(context, "Please enter valid time");
+                                  errshowSnackBar(context, "Please enter valid time");
                                 } 
                                 else if((dateInputController.text.isEmpty)){
-                                  showSnackBar(context, "Please select Date");
+                                  errshowSnackBar(context, "Please select Date");
                                 } 
                                 else if((Projectvalue == null)){
-                                  showSnackBar(context, "Please select project");
+                                  errshowSnackBar(context, "Please select project");
                                 } 
                                 else if((Listvalue == null)){
-                                  showSnackBar(context, "Please select Task");
+                                  errshowSnackBar(context, "Please select Task");
                                 } 
                   
                                  else if((description.isEmpty)){
-                                  showSnackBar(context, "Please enter description");
+                                  errshowSnackBar(context, "Please enter description");
                                 } 
                                 
                   
                                  else {
                                 
-                                  showSnackBar(context, "Please enter all fields.");
+                                  errshowSnackBar(context, "Please enter all fields.");
                                 }
                   },
                   child: const Text("Update Task"),
@@ -407,6 +412,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
 
       setState(() {
         startTimeController.text = pickedTime.format(context);
+        startTimeController1.text = formattedTime;
       });
     } else {
       print("Time is not selected");
@@ -426,6 +432,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
         endTimeController.text = pickedTime.format(context);
+        endTimeController1.text = formattedTime;
       });
     } else {
       print("Time is not selected");
@@ -436,10 +443,21 @@ class _EditTaskPageState extends State<EditTaskPage> {
 
   // <<<<<<<<<<<<<<<<<<<<< SnackBar design..>>>>>>>>>>>>>>>>
 
-  void showSnackBar(BuildContext context, String message) {
+  void errshowSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+      width: 330,
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+    void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green,
       behavior: SnackBarBehavior.floating,
       width: 330,
       duration: const Duration(seconds: 2),
@@ -509,14 +527,14 @@ class _EditTaskPageState extends State<EditTaskPage> {
     print('update id1--${widget.dailyTimeId}');
     api.updatetask(widget.dailyTimeId!, updateTask).then((response) {
       if (response.status == true) {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           PageTransition(type: PageTransitionType.fade,
-              child:BottomNaviagate(screenindex: 2)),
+              child:BottomNaviagate(screenindex: 0)),(Route<dynamic> route) => false,
         );
 
         showSnackBar(context, "${response.message}");
       } else {
-        showSnackBar(context, "${response.message}");
+        errshowSnackBar(context, "${response.message}");
       }
     });
     print('update id--${widget.dailyTimeId}');
