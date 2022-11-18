@@ -59,10 +59,13 @@ class _TaskPageState extends State<TaskPage> {
       //converting to DateTime so that we can further format on different pattern.
       print('time--$parsedTime');
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
-      print('time2--$formattedTime');
+      print('time1--$formattedTime');
       if(mounted){
       setState(() {
         startTimeController.text = pickedTime.format(context);
+        startTimeController1.text = formattedTime;
+        print("one${startTimeController.text}");
+        print("two${startTimeController1.text}");
       });
     } else {
       print("Time is not selected");
@@ -82,7 +85,10 @@ class _TaskPageState extends State<TaskPage> {
       print('time22--$formattedTime');
       //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
-        endTimeController.text = pickedTime.format(context);
+        endTimeController.text =pickedTime.format(context); 
+        endTimeController1.text = formattedTime;
+        print(endTimeController.text);
+        print(endTimeController1.text);
       });
     } else {
       print("Time is not selected");
@@ -93,7 +99,9 @@ class _TaskPageState extends State<TaskPage> {
   final user = FirebaseAuth.instance.currentUser!;//firebase insatance code its user to know who loged in here..
 
   TextEditingController startTimeController = TextEditingController();
+  TextEditingController startTimeController1 = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
+  TextEditingController endTimeController1 = TextEditingController();
   TextEditingController ProjectController = TextEditingController();
   TextEditingController TaskController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -141,23 +149,20 @@ class _TaskPageState extends State<TaskPage> {
     return SafeArea(
         child: Scaffold(
                 appBar: AppBar(
-                  title: const Padding(
-                    padding: EdgeInsets.only(left: 70),
-                    child: Text('UpdateTask',textAlign: TextAlign.left),
-                  ),
+                  centerTitle: true,
+                  title: Text('UpdateTask',textAlign: TextAlign.center),
                   backgroundColor: Colors.deepPurple,
                   shape: const RoundedRectangleBorder(
                   borderRadius:
                           BorderRadius.vertical(bottom: Radius.circular(18.0))),
                 ),
-
                 body: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: isLoading ? const Center(
                 child: SizedBox(
                 width: 65,
                 height: 40,
-                // <<<<<<<<<<<<<<<<< Loading widget style here...>>>>>>>>>>>>>>>>>>
+                // ..Loading widget style..
                 child: LoadingIndicator(
                     indicatorType: Indicator.lineScalePulseOutRapid,
                     colors: [
@@ -170,7 +175,6 @@ class _TaskPageState extends State<TaskPage> {
                     strokeWidth: 10,
                     pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
               ))
-              // <<<<<<<<<<<<<<<<< End here...>>>>>>>>>>>>>>>>>>
             : SingleChildScrollView(
               child:FormsFields(context),
                   ),
@@ -210,6 +214,7 @@ class _TaskPageState extends State<TaskPage> {
                                     child: TextFormField(
                                       // inputFormatters: [maskFormatter],
                             onTap: Timepick,
+                            readOnly: true,
                             enableInteractiveSelection: false,
                             textInputAction: TextInputAction.next,
                             controller: startTimeController,
@@ -217,7 +222,7 @@ class _TaskPageState extends State<TaskPage> {
                             maxLength: 8,
                             maxLines: 1,
                             decoration: const InputDecoration(
-                            filled: true,
+                            // filled: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue)),
                               hintText: "10:00",
@@ -240,6 +245,7 @@ class _TaskPageState extends State<TaskPage> {
                                   width:MediaQuery.of(context).size.width * 0.4,
                                   height: 70,
                                     child: TextFormField(
+                                      readOnly: true,
                                       enableInteractiveSelection: false,
                                       // inputFormatters: [maskFormatter],
                                       textInputAction: TextInputAction.next,
@@ -294,9 +300,10 @@ class _TaskPageState extends State<TaskPage> {
                                     onTap: () async {
                                       DateTime? pickedDate = await showDatePicker(context: context,
                                           initialDate: DateTime.now(),
-                                          firstDate: DateTime(1950),
+                                          firstDate: DateTime(2010),
+                                          
                                           //DateTime.now() - not to allow to choose before today.
-                                          lastDate: DateTime(2100));
+                                          lastDate: DateTime.now());
                                     
                                       if (pickedDate != null) {
                                         print(pickedDate); //pickedDate output format => 2021-03-10
@@ -397,7 +404,7 @@ class _TaskPageState extends State<TaskPage> {
                                     validator: (value) {
                                       description = value!;
                                       if (value.isEmpty) {
-                                        return "please enter feild";
+                                        return "please enter field";
                                       }
                                     },
                                     decoration: const InputDecoration(
@@ -440,29 +447,29 @@ class _TaskPageState extends State<TaskPage> {
                                   print('api called');
                                 }
                                 else if(startTime.isEmpty|| endTime.isEmpty){
-                                  showSnackBar(context, "Please enter time");
+                                  errshowSnackBar(context, "Please enter time");
                                 }
                                 else if((startTime == endTime)){
-                                  showSnackBar(context, "Please enter valid time");
+                                  errshowSnackBar(context, "Please enter valid time");
                                 } 
                                 else if((dateInputController.text.isEmpty)){
-                                  showSnackBar(context, "Please select Date");
+                                  errshowSnackBar(context, "Please select Date");
                                 } 
                                 else if((dropdownvalue == null)){
-                                  showSnackBar(context, "Please select project");
+                                  errshowSnackBar(context, "Please select project");
                                 } 
                                 else if((dropdownvalue1 == null)){
-                                  showSnackBar(context, "Please select Task");
+                                  errshowSnackBar(context, "Please select Task");
                                 } 
                   
                                  else if((description.isEmpty)){
-                                  showSnackBar(context, "Please enter description");
+                                  errshowSnackBar(context, "Please enter description");
                                 } 
                                 
                   
                                  else {
                                 
-                                  showSnackBar(context, "Please enter all fields.");
+                                  errshowSnackBar(context, "Please enter all fields.");
                                 }
                               },
                               child: const Text("Add Task"),
@@ -528,10 +535,20 @@ List Alltasklist = [];
   // <<<<<<<<<<<<<<<<< Clockify API End here...>>>>>>>>>>>>>>>>>>
 
 //<<<<<<<<<<< snackbar style here..>>>>>>>>>>>>>>>
-  void showSnackBar(BuildContext context, String message) {
+  void errshowSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+      width: 330,
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+    void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green,
       behavior: SnackBarBehavior.floating,
       width: 330,
       duration: const Duration(seconds: 2),
@@ -551,19 +568,21 @@ List Alltasklist = [];
     TaskData.taskDescription = descriptionController.text;
     TaskData.startedDate = dateInputController.text;
     TaskData.endTime = endTimeController.text;
+    TaskData.cal_startTime=startTimeController1.text;
+    TaskData.cal_endTime =endTimeController1.text;
     api.createtask(TaskData).then((response) {
       if (response.status == true) {
         print(response.status);
          Navigator.of(context).pushReplacement(
-        PageTransition(child:BottomNaviagate(screenindex: 2),type: PageTransitionType.rightToLeftWithFade,duration: Duration(seconds: 2),alignment: Alignment.topCenter,childCurrent: this.widget),);
+        PageTransition(child:BottomNaviagate(screenindex: 0),type: PageTransitionType.rightToLeftWithFade,duration: Duration(seconds: 2),alignment: Alignment.topCenter,childCurrent: this.widget),);
         print(response.message);
         showSnackBar(context, '${response.message}');
       } else if(response.message== "Internal server error. Please try again later !"){
-        showSnackBar(context, 'Entered Fields not valid please check!');
+        errshowSnackBar(context, 'Please Check Your Time');
        
       }
       else {
-        showSnackBar(context, '${response.message}');
+        errshowSnackBar(context, '${response.message}');
          Navigator.of(context).push(
         PageTransition(child:AddInfoPage(),type: PageTransitionType.fade,duration: Duration(seconds: 1),alignment: Alignment.topCenter,childCurrent: this.widget),);
         
