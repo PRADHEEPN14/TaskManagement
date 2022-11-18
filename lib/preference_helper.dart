@@ -25,6 +25,23 @@ class PreferenceHelper {
     await prefs.setInt('userId', userId);
   }
 
+    static saveUserRoleId(int user_roleId) async {
+    if (user_roleId == null) return;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('user_roleId', user_roleId);
+  }
+
+    static getUserRoleId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? value = prefs.getInt('user_roleId');
+    if (value==null) {
+      return null;
+    } else {
+      return value;
+    }
+  }
+
   static getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? value = prefs.getInt('userId');
