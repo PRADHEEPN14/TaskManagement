@@ -28,16 +28,18 @@ class GoogleLogin_Res {
 class Data {
   String? fullName;
   String? email;
-  Null? fcmToken;
+  String? fcmToken;
   int? user_id;
+  int? role_id;
 
-  Data({this.fullName, this.email, this.fcmToken, this.user_id});
+  Data({this.fullName, this.email, this.fcmToken, this.user_id, this.role_id});
 
   Data.fromJson(Map<String, dynamic> json) {
     fullName = json['full_name'];
     email = json['email'];
     fcmToken = json['fcm_token'];
       user_id = json['user_id'];
+      role_id = json['role_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +48,7 @@ class Data {
     data['email'] = this.email;
     data['fcm_token'] = this.fcmToken;
     data['user_id'] = this.user_id;
+    data['role_id'] = this.role_id;
     return data;
   }
 }
