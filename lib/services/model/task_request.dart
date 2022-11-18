@@ -3,6 +3,8 @@ class Task_Req {
   String? clockifyTaskId;
   String? startedDate;
   String? startTime;
+  String? cal_startTime;
+  String? cal_endTime;
   String? endTime;
   String? taskDescription;
 
@@ -11,6 +13,8 @@ class Task_Req {
       this.clockifyTaskId,
       this.startedDate,
       this.startTime,
+      this.cal_startTime,
+      this.cal_endTime,
       this.endTime,
       this.taskDescription});
 
@@ -20,6 +24,8 @@ class Task_Req {
     startedDate = json['started_date'];
     startTime = json['start_time'];
     endTime = json['end_time'];
+    cal_endTime =json['cal_end_time'];
+    cal_startTime =json['cal_start_time'];
     taskDescription = json['task_description'];
   }
 
@@ -29,7 +35,9 @@ class Task_Req {
     data['clockify_task_id'] = this.clockifyTaskId;
     data['started_date'] = this.startedDate;
     data['start_time'] = this.startTime;
+    data['cal_start_time'] = this.cal_startTime;
     data['end_time'] = this.endTime;
+    data['cal_end_time'] = this.cal_endTime;
     data['task_description'] = this.taskDescription;
     return data;
   }
