@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:bloc_auth/bloc/auth/auth_bloc.dart';
+import 'package:bloc_auth/data/repositories/auth_repository.dart';
 // import 'package:bloc_auth/bloc/bloc/auth_bloc.dart';
 import 'package:bloc_auth/presentation/Dashboard/dashboard.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,6 +28,14 @@ class _SignInState extends State<SignIn> {
   var ctx;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  // void initState() {
+  //  super.initState();
+  //      FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Change here
+  //   _firebaseMessaging.getToken().then((token){
+  //     print("token is $token");
+  // });
+  // }
 
   @override
   void dispose() {
@@ -61,7 +71,7 @@ class _SignInState extends State<SignIn> {
           if (state is AuthError) {
             // Showing the error message if the user has entered invalid credentials //state.error//
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Something went wrong try Again..')));
+                content: Text('Something went wrong try Again..'),backgroundColor: Colors.red,));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(
@@ -85,7 +95,9 @@ class _SignInState extends State<SignIn> {
                     pathBackgroundColor: Color.fromARGB(255, 251, 2, 2)),
               ));
             }
-            if (state is UnAuthenticated) {
+            if (state is UnAuthenticated){
+              // context.read<AuthBloc>().add(SignOutRequested());
+              
               // Showing the sign in form if the user is not authenticated
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -120,8 +132,9 @@ class _SignInState extends State<SignIn> {
                           ),
                           const SizedBox(height: 18),
                           Padding(
-                            padding: const EdgeInsets.all(25.0),
-                            child: SignInButton(
+                            padding: const EdgeInsets.all(26.0),
+                            child:
+                             SignInButton(
                               Buttons.GoogleDark,
                               onPressed: () {
                                 // google signin function..
