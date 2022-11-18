@@ -15,11 +15,14 @@ import 'package:retrofit/retrofit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preference_helper.dart';
+import '../model/datesearch_response.dart';
 import '../model/getupdate_detail_res.dart';
 import '../model/profile_request.dart';
 import '../model/profile_response.dart';
 import '../model/project_list.dart';
 import '../model/update_profile.dart';
+import '../model/userlist_response.dart';
+import '../model/usertasklist_response.dart';
 
 part 'ApiService.g.dart';
 
@@ -59,6 +62,17 @@ abstract class ApiService {
 
   @GET("app/getUserUpdate/{userId}")
   Future<Userupdate_Res> updatedetail(@Path("userId") int userId);
+
+  @GET("app/dateFilterUser/{userId}?from={firstDate}&to={lastDate}")
+  Future<Datefilter_res>datfilter(@Path("firstDate") String firstDate,@Path("lastDate") String lastDate,@Path("userId") int userId);
+
+  @GET("app/userNames")
+  Future<userList_res> userlistdetail();
+
+  @GET("timeEntry/getTimeentryUser/{usernameId}")
+  Future<UsertaskList_Res> usertasklist(@Path("usernameId")int? usernameId);
+  
+  // http://demo.emeetify.com:8080/daytodaytask/app/dateFilterUser/219?from=2022-11-01&to=2022-11-04
 
 
 ////////////////////////////////////////////////////////
