@@ -2,7 +2,15 @@
 
 // import 'dart:html';
 
+import 'dart:ffi';
+
+import 'package:bloc_auth/presentation/widgets/drawer.dart';
+import 'package:bloc_auth/presentation/widgets/floatingbutton.dart';
+import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
+
 import 'package:bloc_auth/presentation/Home/home_page.dart';
+import 'package:bloc_auth/presentation/SearchPage/searchpage.dart';
 import 'package:bloc_auth/presentation/Task/task_page.dart';
 import 'package:bloc_auth/presentation/widgets/bottom_navigationbar.dart';
 import 'package:bloc_auth/services/model/tasklist_response.dart';
@@ -58,6 +66,12 @@ class _TaskListState extends State<TaskList> {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
+              centerTitle: true,
+              actions: [
+              IconButton(onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Searchpage(),));
+              }, icon:Icon(Icons.search))
+              ],
               title: const Center(child: Text('TaskList')),
               backgroundColor: Colors.deepPurple,
               shape: const RoundedRectangleBorder(
@@ -66,16 +80,17 @@ class _TaskListState extends State<TaskList> {
             ),
             body: isLoading
                 ? const Center(child: LoadingWidget()
-                ): TaskListWidget()
+                ): TaskListWidget(),
+                drawer: MyDrawer(),
+                floatingActionButton: FActionbutton()
                 )
               );
   }
-
-
+ String dateFormatter = 'MMM, dd, y';
 
 
 // ListViewBuilder Code Here>>>>>>>
-  Container TaskListWidget() {
+  Container TaskListWidget(){
     return Container(
         child: AllTask!.length != 0
             ? ListView.builder(
@@ -85,9 +100,40 @@ class _TaskListState extends State<TaskList> {
                   // Using CARD design...
                   return Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, top: 3),
-                    child: Carddesign(i, context),
+                    child: Column(
+                      children: [
+                        // Text(date.formatDate(),style:TextStyle(fontSize:20,backgroundColor:Colors.blue,fontWeight:FontWeight.bold)),
+                        Carddesign(i, context),
+                      ],
+                    ),
                   );
-                }))
+              //     bool isSameDate = true;
+              // var dateString = AllTask![i].startedDate!;
+              // var parsetime = DateTime.parse(dateString);
+              // print(dateString);
+              //  String formatdate = DateFormat('yyyy-MM-dd').format(parsetime);
+              // final DateTime date = DateTime.parse(formatdate) ;
+              // final item = AllTask![i];
+              // if (i == 0) {
+              //   isSameDate = false;
+              // } else {
+              //   final String prevDateString = AllTask![i - 1].startedDate!;
+              //   var parsetime1 = DateTime.parse(prevDateString);
+              //   String formatdate1 = DateFormat('yyyy-MM-dd').format(parsetime1);
+              //   final DateTime prevDate = DateTime.parse(formatdate1);
+              //   isSameDate = date.isSameDate(prevDate);
+              // }
+              // if (i == 0 || !(isSameDate)) {
+              //   return Column(children: [
+              //     Text(date.formatDate()),
+              //     ListTile(title: Text('item $i'))
+              //   ]);
+              // } else {
+              //   return ListTile(title: Text('item $i'));
+              // }
+                }
+                )
+                )
             : Center(
                 child: Showmessage(),
               ));
@@ -112,20 +158,14 @@ class _TaskListState extends State<TaskList> {
                         '${AllTask![i].taskDescription}',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(
-                          '${AllTask![i].projectName}|| ${AllTask![i].taskName}',
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 12)),
-                      leading: TextButton(
-                          onPressed: () {
-                            // view Task details Fuction
-                            viewTask(context, i);
-                          },
-                          child: const Icon(
-                            Icons.remove_red_eye_sharp,
-                            color: Colors.deepPurple,
-                            size: 18,
-                          )),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                            '${AllTask![i].projectName}|| ${AllTask![i].taskName}',
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 12)),
+                      ),
+                      leading: Icon(Icons.playlist_add_check_circle_outlined,size: 30,color: Colors.black45,)
                     ),
                   );
   }
@@ -136,6 +176,7 @@ class _TaskListState extends State<TaskList> {
 // PopUpMenu Button code with function>>>>>>>
   PopupMenuButton<int> PopUpMenu(int i, BuildContext context) {
     return PopupMenuButton(
+      padding: EdgeInsets.only(left: 25),
                         onSelected: (value) async {
                           if (value == 1) {
                             await edittask(
@@ -231,7 +272,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            // border: OutlineInputBorder(),
                             hintText: 'Start Time:  ${AllTask![i].startTime}',
                             hintStyle: TextStyle(
                                 fontSize: 15,
@@ -243,7 +284,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            // border: OutlineInputBorder(),
                             hintText: 'End Time:  ${AllTask![i].endTime}',
                             hintStyle: TextStyle(
                                 fontSize: 15,
@@ -255,7 +296,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              // border: OutlineInputBorder(),
                               hintText: 'Date:  ${AllTask![i].startedDate}',
                               hintStyle: TextStyle(
                                   fontSize: 15,
@@ -266,7 +307,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              // border: OutlineInputBorder(),
                               hintText: 'Project:   ${AllTask![i].projectName}',
                               hintStyle: TextStyle(
                                   fontSize: 15,
@@ -277,7 +318,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            // border: OutlineInputBorder(),
                             hintText: 'Task:  ${AllTask![i].taskName}',
                             hintStyle: TextStyle(
                                 fontSize: 15,
@@ -289,7 +330,7 @@ class _TaskListState extends State<TaskList> {
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            // border: OutlineInputBorder(),
                             hintText:
                                 'Description:  ${AllTask![i].taskDescription}',
                             hintStyle: TextStyle(
@@ -344,7 +385,7 @@ class _TaskListState extends State<TaskList> {
           });
         }
       } else {
-        showSnackBar(context, "${response.message}");
+        errshowSnackBar(context, "${response.message}");
         setState(() {
           isLoading = false;
         });
@@ -364,19 +405,28 @@ class _TaskListState extends State<TaskList> {
     api.deletetask(dailyEntryId).then((response) {
       if (response.status == true) {
         showSnackBar(context, "${response.message}");
-
-        setState(() {
-          alltask();
-        });
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => BottomNaviagate(screenindex: 0,),));
       } else {
-        showSnackBar(context, "${response.message}");
+        print("...deleted1111..."); 
+        errshowSnackBar(context, "${response.message}");
       }
+
     });
     print('delete id--$dailyEntryId');
   }
 
 //<<<<<<<<<<< Snackbar style ..>>>>>>>>>>>>>>>
   void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green,
+      behavior: SnackBarBehavior.floating,
+      width: 330,
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+    void errshowSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: Colors.redAccent,
@@ -420,6 +470,25 @@ class _TaskListState extends State<TaskList> {
   }
 }
 
+extension DateHelper on DateTime {
+  
+   String formatDate() {
+     String? dateFormatter;
+     final formatter = DateFormat(dateFormatter);
+      return formatter.format(this);
+  }
+  bool isSameDate(DateTime other) {
+    return this.day == other.day &&
+    this.month == other.month &&
+    this.year == other.year ;
+        
+  }
+
+  int getDifferenceInDaysWithNow() {
+    final now = DateTime.now();
+    return now.difference(this).inDays;
+  }
+}
 // Loading Widget class>>>>>>>
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({Key? key,}) : super(key: key);
