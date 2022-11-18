@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_auth/data/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -46,12 +47,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleSignInRequested>((event, emit) async {
       emit(Loading());
       try {
+       authRepository.signOut();
         GoogleSignInAccount? googleUser = await authRepository.signInWithGoogle(event.context!);
-       GoogleLogin_Res data = await  googlelogin(event.context, googleUser,emit);
+       final data = await  googlelogin(event.context, googleUser,emit);
 
-       if(data != null){
+       if(data.status!)
+       {
+        print(data.status);
             emit(Authenticated());
             // print(data);
+       }
+       else{
+        print(data.status);
+        emit(UnAuthenticated());
+        authRepository.signOut();
+        GoogleSignIn().signOut();
        }
         
       //  emit(Authenticated());
@@ -76,29 +86,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
  // <<<<<<<<<<<<<<<<<<<<< Google login function here..>>>>>>>>>>>>>>>>
 
      Future<GoogleLogin_Res> googlelogin(BuildContext? context,GoogleSignInAccount? googleUser,Emitter<AuthState> emit) async{
+                FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Change here
+    _firebaseMessaging.getToken().then((token){
+      print("token is $token");
+  });
     GoogleLogin_Req UserData = GoogleLogin_Req();
     GoogleLogin_Res result = GoogleLogin_Res();
     UserData.email= googleUser!.email;
     UserData.fullName=googleUser!.displayName;
+    // UserData.email= _firebaseMessaging.;
     var api = Provider.of<ApiService>(context!, listen: false);
     print(UserData.email);
     print(UserData.fullName);
     await api.googlelogin(UserData).then((response)async{
-      
-     if(response != null && response.token!=null) {
+      print("response123 ${response}");
+      result = response;
+     if(response.status !=false && response.token!=null) {
       await PreferenceHelper.saveToken(response.token!);
       
       await PreferenceHelper.saveUserId(response.data!.user_id!);
+
+      await PreferenceHelper.saveUserRoleId(response.data!.role_id!);
       
       print("userid-222${response.data!.user_id!}");
       print("userid-00${response.token!}");
-      
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('${response.message}'),backgroundColor: Colors.green,));     
       // emit(Authenticated()); 
      }else{
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('${response.message}'),backgroundColor: Colors.red,));
       // emit(UnAuthenticated());
      }
 
     });
+
+    print("printiing result ${result.message}");
 
     return result;
 
